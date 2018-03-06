@@ -1,0 +1,38 @@
+{
+    "name": "innmind/tower",
+    "type": "library",
+    "description": "Application deployment tool",
+    "keywords": ["deploy", "cli", "graph"],
+    "homepage": "http://github.com/Innmind/Tower",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Baptiste Langlade",
+            "email": "langlade.baptiste@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "http://github.com/Innmind/Tower/issues"
+    },
+    "require": {
+        "php": "~7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Innmind\\Tower\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Innmind\\Tower\\": "tests/",
+            "Fixture\\Innmind\\Tower\\": "fixtures/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.0",
+        "giorgiosironi/eris": "^0.9.0"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --colors=always"
+    }
+}
