@@ -5,9 +5,11 @@ namespace Tests\Innmind\Tower;
 
 use Innmind\Tower\{
     Configuration,
+    Configuration\Loader,
     Neighbour,
     EnvironmentVariable,
 };
+use Innmind\Url\PathInterface;
 use Innmind\Immutable\{
     Map,
     Set,
@@ -27,6 +29,25 @@ class ConfigurationTest extends TestCase
         $this->assertSame($neighbours, $conf->neighbours());
         $this->assertSame($env, $conf->exports());
         $this->assertSame($actions, $conf->actions());
+    }
+
+    public function testLoad()
+    {
+        $path = $this->createMock(PathInterface::class);
+        $loader = $this->createMock(Loader::class);
+        $loader
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($path)
+            ->willReturn($expected = new Configuration(
+                new Map('string', Neighbour::class),
+                Set::of(EnvironmentVariable::class),
+                Set::of('string')
+            ));
+
+        $conf = Configuration::load($path, $loader);
+
+        $this->assertSame($expected, $conf);
     }
 
     public function testThrowWhenInvalidNeighbourKey()

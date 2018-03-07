@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace Innmind\Tower;
 
+use Innmind\Tower\Configuration\Loader;
+use Innmind\Url\PathInterface;
 use Innmind\Immutable\{
     MapInterface,
     SetInterface,
@@ -43,6 +45,11 @@ final class Configuration
         $this->neighbours = $neighbours;
         $this->exports = $exports;
         $this->actions = $actions;
+    }
+
+    public static function load(PathInterface $path, Loader $load): self
+    {
+        return $load($path);
     }
 
     /**
