@@ -4,7 +4,7 @@ neighbours:
         tags: [foo, bar] # optional
 
 exports: # optional
-    - 'ENV=value' # contains list of env variables that will be available to each action
+    - 'echo "ENV=value"' # contains list of env variables that will be available to each action
 
 actions:
     - 'some bash command'

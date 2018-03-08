@@ -30,8 +30,7 @@ class YamlTest extends TestCase
         );
         $this->assertSame(['foo', 'bar'], $config->neighbours()->get('_name_')->tags()->toPrimitive());
         $this->assertCount(1, $config->exports());
-        $this->assertSame('ENV', $config->exports()->current()->name());
-        $this->assertSame('value', $config->exports()->current()->value());
+        $this->assertSame('echo "ENV=value"', $config->exports()->current());
         $this->assertCount(1, $config->actions());
         $this->assertSame('some bash command', $config->actions()->current());
     }

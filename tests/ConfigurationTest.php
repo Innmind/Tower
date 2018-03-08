@@ -22,7 +22,7 @@ class ConfigurationTest extends TestCase
     {
         $conf = new Configuration(
             $neighbours = new Map('string', Neighbour::class),
-            $env = Set::of(EnvironmentVariable::class),
+            $env = Set::of('string'),
             $actions = Set::of('string')
         );
 
@@ -41,7 +41,7 @@ class ConfigurationTest extends TestCase
             ->with($path)
             ->willReturn($expected = new Configuration(
                 new Map('string', Neighbour::class),
-                Set::of(EnvironmentVariable::class),
+                Set::of('string'),
                 Set::of('string')
             ));
 
@@ -57,7 +57,7 @@ class ConfigurationTest extends TestCase
 
         new Configuration(
             new Map('int', Neighbour::class),
-            Set::of(EnvironmentVariable::class),
+            Set::of('string'),
             Set::of('string')
         );
     }
@@ -69,7 +69,7 @@ class ConfigurationTest extends TestCase
 
         new Configuration(
             new Map('string', 'string'),
-            Set::of(EnvironmentVariable::class),
+            Set::of('string'),
             Set::of('string')
         );
     }
@@ -77,11 +77,11 @@ class ConfigurationTest extends TestCase
     public function testThrowWhenInvalidEnvVars()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Argument 2 must be of type SetInterface<Innmind\Tower\EnvironmentVariable>');
+        $this->expectExceptionMessage('Argument 2 must be of type SetInterface<string>');
 
         new Configuration(
             new Map('string', Neighbour::class),
-            Set::of('string'),
+            Set::of('int'),
             Set::of('string')
         );
     }
@@ -93,7 +93,7 @@ class ConfigurationTest extends TestCase
 
         new Configuration(
             new Map('string', Neighbour::class),
-            Set::of(EnvironmentVariable::class),
+            Set::of('string'),
             Set::of('int')
         );
     }

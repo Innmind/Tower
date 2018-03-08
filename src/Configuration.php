@@ -31,11 +31,8 @@ final class Configuration
             ));
         }
 
-        if ((string) $exports->type() !== EnvironmentVariable::class) {
-            throw new \TypeError(sprintf(
-                'Argument 2 must be of type SetInterface<%s>',
-                EnvironmentVariable::class
-            ));
+        if ((string) $exports->type() !== 'string') {
+            throw new \TypeError('Argument 2 must be of type SetInterface<string>');
         }
 
         if ((string) $actions->type() !== 'string') {
@@ -61,7 +58,7 @@ final class Configuration
     }
 
     /**
-     * @return SetInterface<EnvironmentVariable>
+     * @return SetInterface<string>
      */
     public function exports(): SetInterface
     {

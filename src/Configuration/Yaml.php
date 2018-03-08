@@ -7,14 +7,12 @@ use Innmind\Tower\{
     Configuration,
     Neighbour,
     Neighbour\Name,
-    EnvironmentVariable,
 };
 use Innmind\Url\{
     Url,
     PathInterface,
 };
 use Innmind\Immutable\{
-    Sequence,
     Map,
     Set,
 };
@@ -54,12 +52,7 @@ final class Yaml implements Loader
 
         return new Configuration(
             $neighbours,
-            Sequence::of(...$config['exports'])->reduce(
-                Set::of(EnvironmentVariable::class),
-                static function(Set $exports, string $env): Set {
-                    return $exports->add(new EnvironmentVariable($env));
-                }
-            ),
+            Set::of('string', ...$config['exports']),
             Set::of('string', ...$config['actions'])
         );
     }
