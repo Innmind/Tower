@@ -27,5 +27,10 @@ class NeighbourTest extends TestCase
         $this->assertInstanceOf(SetInterface::class, $neighbour->tags());
         $this->assertSame('string', (string) $neighbour->tags()->type());
         $this->assertSame(['bar', 'baz'], $neighbour->tags()->toPrimitive());
+        $this->assertTrue($neighbour->matches('bar'));
+        $this->assertTrue($neighbour->matches('baz'));
+        $this->assertTrue($neighbour->matches('bar', 'baz'));
+        $this->assertTrue($neighbour->matches('foo', 'baz'));
+        $this->assertFalse($neighbour->matches('foo', 'watev'));
     }
 }

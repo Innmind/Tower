@@ -40,4 +40,11 @@ final class Neighbour
     {
         return $this->tags;
     }
+
+    public function matches(string ...$tags): bool
+    {
+        $tags = Set::of('string', ...$tags);
+
+        return $this->tags->intersect($tags)->size() > 0;
+    }
 }
