@@ -8,7 +8,7 @@ use Innmind\Immutable\Str;
 
 final class EnvironmentVariable
 {
-    private const PATTERN = '~^(?<name>[A-Z_]+)=(?<value>.*)$~';
+    private const PATTERN = '~^(?<name>[A-Z0-9_]+)=(?<value>.*)$~';
 
     private $name;
     private $value;

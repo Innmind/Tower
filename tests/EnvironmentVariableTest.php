@@ -22,9 +22,9 @@ class EnvironmentVariableTest extends TestCase
         $this
             ->forAll(Generator\string())
             ->then(function(string $string): void {
-                $env = new EnvironmentVariable('FOO_BAR='.$string);
+                $env = new EnvironmentVariable('FOO_BAR_42='.$string);
 
-                $this->assertSame('FOO_BAR', $env->name());
+                $this->assertSame('FOO_BAR_42', $env->name());
                 $this->assertSame($string, $env->value());
             });
     }
