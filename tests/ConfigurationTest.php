@@ -10,10 +10,7 @@ use Innmind\Tower\{
     EnvironmentVariable,
 };
 use Innmind\Url\PathInterface;
-use Innmind\Immutable\{
-    Map,
-    Set,
-};
+use Innmind\Immutable\Set;
 use PHPUnit\Framework\TestCase;
 
 class ConfigurationTest extends TestCase
@@ -21,7 +18,7 @@ class ConfigurationTest extends TestCase
     public function testInterface()
     {
         $conf = new Configuration(
-            $neighbours = new Map('string', Neighbour::class),
+            $neighbours = Set::of(Neighbour::class),
             $env = Set::of('string'),
             $actions = Set::of('string')
         );
@@ -40,7 +37,7 @@ class ConfigurationTest extends TestCase
             ->method('__invoke')
             ->with($path)
             ->willReturn($expected = new Configuration(
-                new Map('string', Neighbour::class),
+                Set::of(Neighbour::class),
                 Set::of('string'),
                 Set::of('string')
             ));
@@ -50,25 +47,13 @@ class ConfigurationTest extends TestCase
         $this->assertSame($expected, $conf);
     }
 
-    public function testThrowWhenInvalidNeighbourKey()
+    public function testThrowWhenInvalidNeighbour()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Argument 1 must be of type MapInterface<string, Innmind\Tower\Neighbour>');
+        $this->expectExceptionMessage('Argument 1 must be of type SetInterface<Innmind\Tower\Neighbour>');
 
         new Configuration(
-            new Map('int', Neighbour::class),
-            Set::of('string'),
-            Set::of('string')
-        );
-    }
-
-    public function testThrowWhenInvalidNeighbourValue()
-    {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Argument 1 must be of type MapInterface<string, Innmind\Tower\Neighbour>');
-
-        new Configuration(
-            new Map('string', 'string'),
+            Set::of('int'),
             Set::of('string'),
             Set::of('string')
         );
@@ -80,7 +65,7 @@ class ConfigurationTest extends TestCase
         $this->expectExceptionMessage('Argument 2 must be of type SetInterface<string>');
 
         new Configuration(
-            new Map('string', Neighbour::class),
+            Set::of(Neighbour::class),
             Set::of('int'),
             Set::of('string')
         );
@@ -92,7 +77,7 @@ class ConfigurationTest extends TestCase
         $this->expectExceptionMessage('Argument 3 must be of type SetInterface<string>');
 
         new Configuration(
-            new Map('string', Neighbour::class),
+            Set::of(Neighbour::class),
             Set::of('string'),
             Set::of('int')
         );

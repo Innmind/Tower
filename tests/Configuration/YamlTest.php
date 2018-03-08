@@ -25,10 +25,14 @@ class YamlTest extends TestCase
         $this->assertInstanceOf(Configuration::class, $config);
         $this->assertCount(1, $config->neighbours());
         $this->assertSame(
-            'ssh://example.com:80/path/to/config/on/neighbour/server.yml',
-            (string) $config->neighbours()->get('_name_')->url()
+            '_name_',
+            (string) $config->neighbours()->current()->name()
         );
-        $this->assertSame(['foo', 'bar'], $config->neighbours()->get('_name_')->tags()->toPrimitive());
+        $this->assertSame(
+            'ssh://example.com:80/path/to/config/on/neighbour/server.yml',
+            (string) $config->neighbours()->current()->url()
+        );
+        $this->assertSame(['foo', 'bar'], $config->neighbours()->current()->tags()->toPrimitive());
         $this->assertCount(1, $config->exports());
         $this->assertSame('echo "ENV=value"', $config->exports()->current());
         $this->assertCount(1, $config->actions());

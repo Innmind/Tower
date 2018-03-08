@@ -12,10 +12,7 @@ use Innmind\Url\{
     Url,
     PathInterface,
 };
-use Innmind\Immutable\{
-    Map,
-    Set,
-};
+use Innmind\Immutable\Set;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Yaml as Parser;
 
@@ -36,11 +33,10 @@ final class Yaml implements Loader
             $this->config,
             [Parser::parseFile((string) $configPath)]
         );
-        $neighbours = new Map('string', Neighbour::class);
+        $neighbours = Set::of(Neighbour::class);
 
         foreach ($config['neighbours'] as $name => $value) {
-            $neighbours = $neighbours->put(
-                $name,
+            $neighbours = $neighbours->add(
                 new Neighbour(
                     new Name($name),
                     Url::fromString($value['url']),

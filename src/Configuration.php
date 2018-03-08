@@ -5,10 +5,7 @@ namespace Innmind\Tower;
 
 use Innmind\Tower\Configuration\Loader;
 use Innmind\Url\PathInterface;
-use Innmind\Immutable\{
-    MapInterface,
-    SetInterface,
-};
+use Innmind\Immutable\SetInterface;
 
 final class Configuration
 {
@@ -17,16 +14,13 @@ final class Configuration
     private $actions;
 
     public function __construct(
-        MapInterface $neighbours,
+        SetInterface $neighbours,
         SetInterface $exports,
         SetInterface $actions
     ) {
-        if (
-            (string) $neighbours->keyType() !== 'string' ||
-            (string) $neighbours->valueType() !== Neighbour::class
-        ) {
+        if ((string) $neighbours->type() !== Neighbour::class) {
             throw new \TypeError(sprintf(
-                'Argument 1 must be of type MapInterface<string, %s>',
+                'Argument 1 must be of type SetInterface<%s>',
                 Neighbour::class
             ));
         }
@@ -50,9 +44,9 @@ final class Configuration
     }
 
     /**
-     * @return MapInterface<string, Neighbour>
+     * @return SetInterface<Neighbour>
      */
-    public function neighbours(): MapInterface
+    public function neighbours(): SetInterface
     {
         return $this->neighbours;
     }
