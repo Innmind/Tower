@@ -1,0 +1,49 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types = 1);
+
+$paths = [
+    'vendor/autoload.php',
+    '../autoload.php',
+    __DIR__ . '/../autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../vendor/autoload.php',
+    getcwd() . '/vendor/autoload.php',
+    getcwd() . '/../vendor/autoload.php',
+];
+
+foreach ($paths as $file) {
+    if (file_exists($file)) {
+        require $file;
+
+        break;
+    }
+}
+
+use Innmind\CLI\{
+    Main,
+    Environment,
+};
+use Innmind\Compose\ContainerBuilder\ContainerBuilder;
+use Innmind\Url\Path;
+use Innmind\Immutable\Map;
+
+new class extends Main {
+    protected function main(Environment $env): void
+    {
+        $path = new Path($env->workingDirectory().'/tower.yml');
+
+        if ($env->variables()->contains('TOWER_CONFIG')) {
+            $path = new Path($env->variables()->get('TOWER_CONFIG'));
+        }
+
+        $container = (new ContainerBuilder)(
+            new Path(__DIR__.'/config/container.yml'),
+            (new Map('string', 'mixed'))
+                ->put('configPath', $path)
+        );
+
+        $run = $container->get('commands');
+        $run($env);
+    }
+};
