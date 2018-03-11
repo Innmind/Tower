@@ -31,13 +31,13 @@ class TcpTest extends TestCase
     {
         $neighbour = new Neighbour(
             new Name('foo'),
-            Url::fromString('tcp://127.0.0.1:1337')
+            Url::fromString('tcp://127.0.0.1:1338')
         );
         $ping = new Tcp;
         $socket = new Internet(
             Transport::tcp(),
             new IPv4('127.0.0.1'),
-            new Port(1337)
+            new Port(1338)
         );
 
         $this->assertNull($ping($neighbour, 'foo', 'bar'));
