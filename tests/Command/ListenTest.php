@@ -118,6 +118,7 @@ class ListenTest extends TestCase
 
         $this->assertTrue($process->isRunning());
         posix_kill($process->pid()->toInt(), SIGKILL);
+        sleep(1);
     }
 
     public function testUsage()
