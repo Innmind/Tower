@@ -34,7 +34,7 @@ final class Listen implements Command
 
     public function __invoke(Environment $env, Arguments $arguments, Options $options): void
     {
-        if ($options->contains('d')) {
+        if ($options->contains('daemon')) {
             $this
                 ->server
                 ->processes()
@@ -67,7 +67,7 @@ final class Listen implements Command
     public function __toString(): string
     {
         return <<<USAGE
-listen port -d
+listen port -d|--daemon
 
 Will open a tcp socket on given port waiting for incoming ping
 

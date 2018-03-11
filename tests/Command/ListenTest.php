@@ -75,7 +75,7 @@ class ListenTest extends TestCase
             ),
             new Options(
                 (new Map('string', 'mixed'))
-                    ->put('d', true)
+                    ->put('daemon', true)
             )
         ));
     }
@@ -83,7 +83,7 @@ class ListenTest extends TestCase
     public function testUsage()
     {
         $expected = <<<USAGE
-listen port -d
+listen port -d|--daemon
 
 Will open a tcp socket on given port waiting for incoming ping
 
