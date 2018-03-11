@@ -14,13 +14,25 @@ use Innmind\CLI\{
 };
 use Innmind\Server\Control\{
     Server,
+    ServerFactory,
     Server\Processes,
+    Server\Command as ServerCommand,
 };
-use Innmind\Socket\Loop;
+use Innmind\Socket\{
+    Loop,
+    Client\Internet,
+    Internet\Transport,
+};
 use Innmind\EventBus\EventBusInterface;
 use Innmind\TimeContinuum\ElapsedPeriod;
-use Innmind\Url\Path;
-use Innmind\Immutable\Map;
+use Innmind\Url\{
+    Path,
+    Url,
+};
+use Innmind\Immutable\{
+    Map,
+    Str,
+};
 use PHPUnit\Framework\TestCase;
 
 class ListenTest extends TestCase
@@ -78,6 +90,34 @@ class ListenTest extends TestCase
                     ->put('daemon', true)
             )
         ));
+    }
+
+    public function testInvoke()
+    {
+        $server = ServerFactory::build();
+        $process = $server
+            ->processes()
+            ->execute(
+                ServerCommand::foreground('./tower')
+                    ->withArgument('listen')
+                    ->withArgument('1337')
+                    ->withWorkingDirectory(getcwd())
+                    ->withEnvironment('TOWER_CONFIG', 'config/config.yml.dist')
+            );
+
+        //wait for the process to open the connection
+        sleep(1);
+
+        $client = new Internet(
+            Transport::tcp(),
+            Url::fromString('//127.0.0.1:1337')->authority()
+        );
+        $client
+            ->write(Str::of('{"tags":[]}'))
+            ->close();
+
+        $this->assertTrue($process->isRunning());
+        posix_kill($process->pid()->toInt(), SIGKILL);
     }
 
     public function testUsage()
