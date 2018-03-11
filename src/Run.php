@@ -17,11 +17,16 @@ final class Run
 {
     private $processes;
     private $configuration;
+    private $ping;
 
-    public function __construct(Server $server, Configuration $configuration)
-    {
+    public function __construct(
+        Server $server,
+        Configuration $configuration,
+        Ping $ping
+    ) {
         $this->processes = $server->processes();
         $this->configuration = $configuration;
+        $this->ping = $ping;
     }
 
     public function __invoke(string ...$tags): void
@@ -52,8 +57,8 @@ final class Run
             ->filter(static function(Neighbour $neighbour) use ($tags): bool {
                 return $neighbour->matches(...$tags);
             })
-            ->foreach(function(Neighbour $neighbour): void {
-                //todo ping the neighbour
+            ->foreach(function(Neighbour $neighbour) use ($tags): void {
+                ($this->ping)($neighbour, ...$tags);
             });
     }
 

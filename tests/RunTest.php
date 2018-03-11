@@ -7,8 +7,11 @@ use Innmind\Tower\{
     Run,
     Configuration,
     Neighbour,
+    Neighbour\Name,
     Exception\ActionFailed,
+    Ping,
 };
+use Innmind\Url\Url;
 use Innmind\Server\Control\{
     Server,
     Server\Processes,
@@ -34,7 +37,8 @@ class RunTest extends TestCase
                 Set::of(Neighbour::class),
                 Set::of('string', 'env1', 'env2'),
                 Set::of('string', 'action1', 'action2')
-            )
+            ),
+            $this->createMock(Ping::class)
         );
         $processes
             ->expects($this->at(0))
@@ -129,7 +133,8 @@ class RunTest extends TestCase
                 Set::of(Neighbour::class),
                 Set::of('string'),
                 Set::of('string', 'action')
-            )
+            ),
+            $this->createMock(Ping::class)
         );
 
         $processes
@@ -149,5 +154,51 @@ class RunTest extends TestCase
             ->willReturn(new ExitCode(1));
 
         $run();
+    }
+
+    public function testPingNeighbours()
+    {
+        $server = $this->createMock(Server::class);
+        $server
+            ->expects($this->once())
+            ->method('processes')
+            ->willReturn($processes = $this->createMock(Processes::class));
+        $neighbour1 = new Neighbour(
+            new Name('1'),
+            Url::fromString('example.com'),
+            'foo'
+        );
+        $neighbour2 = new Neighbour(
+            new Name('2'),
+            Url::fromString('example.com'),
+            'bar'
+        );
+        $neighbour3 = new Neighbour(
+            new Name('3'),
+            Url::fromString('example.com'),
+            'baz'
+        );
+        $run = new Run(
+            $server,
+            new Configuration(
+                Set::of(Neighbour::class, $neighbour1, $neighbour2, $neighbour3),
+                Set::of('string'),
+                Set::of('string')
+            ),
+            $ping = $this->createMock(Ping::class)
+        );
+        $ping
+            ->expects($this->at(0))
+            ->method('__invoke')
+            ->with($neighbour1, 'foo', 'baz');
+        $ping
+            ->expects($this->at(1))
+            ->method('__invoke')
+            ->with($neighbour3, 'foo', 'baz');
+        $ping
+            ->expects($this->exactly(2))
+            ->method('__invoke');
+
+        $this->assertNull($run('foo', 'baz'));
     }
 }
