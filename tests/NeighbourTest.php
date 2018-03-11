@@ -31,6 +31,7 @@ class NeighbourTest extends TestCase
         $this->assertTrue($neighbour->matches('baz'));
         $this->assertTrue($neighbour->matches('bar', 'baz'));
         $this->assertTrue($neighbour->matches('foo', 'baz'));
+        $this->assertTrue($neighbour->matches());
         $this->assertFalse($neighbour->matches('foo', 'watev'));
     }
 }

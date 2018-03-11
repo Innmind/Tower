@@ -45,6 +45,10 @@ final class Neighbour
     {
         $tags = Set::of('string', ...$tags);
 
+        if ($tags->size() === 0) {
+            return true;
+        }
+
         return $this->tags->intersect($tags)->size() > 0;
     }
 }
