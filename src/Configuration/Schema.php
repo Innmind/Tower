@@ -23,7 +23,7 @@ final class Schema implements ConfigurationInterface
                 ->end()
                 ->arrayNode('actions')
                     ->prototype('scalar')->end()
-                    ->requiresAtLeastOneElement()
+                    ->defaultValue([])
                 ->end()
                 ->arrayNode('neighbours')
                     ->useAttributeAsKey('name')
