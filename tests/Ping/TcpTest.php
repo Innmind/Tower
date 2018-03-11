@@ -43,6 +43,7 @@ class TcpTest extends TestCase
         $this->assertNull($ping($neighbour, 'foo', 'bar'));
         $connection = $socket->accept();
         $data = $connection->read();
+        $connection->close();
         $this->assertSame(
             ['tags' => ['foo', 'bar']],
             json_decode((string) $data, true)
