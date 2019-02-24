@@ -29,6 +29,7 @@ use Innmind\Url\{
     Path,
     Url,
 };
+use Innmind\OperatingSystem\Ports;
 use Innmind\Immutable\{
     Map,
     Str,
@@ -42,6 +43,7 @@ class ListenTest extends TestCase
         $this->assertInstanceOf(
             Command::class,
             new Listen(
+                $this->createMock(Ports::class),
                 $this->createMock(Server::class),
                 new Loop(
                     $this->createMock(EventBus::class),
@@ -54,6 +56,7 @@ class ListenTest extends TestCase
     public function testDaemonize()
     {
         $listen = new Listen(
+            $this->createMock(Ports::class),
             $server = $this->createMock(Server::class),
             new Loop(
                 $this->createMock(EventBus::class),
@@ -133,6 +136,7 @@ USAGE;
         $this->assertSame(
             $expected,
             (string) new Listen(
+                $this->createMock(Ports::class),
                 $this->createMock(Server::class),
                 new Loop(
                     $this->createMock(EventBus::class),

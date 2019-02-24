@@ -7,7 +7,10 @@ use function Innmind\Tower\bootstrap;
 use Innmind\Server\Control\Server;
 use Innmind\CLI\Commands;
 use Innmind\Url\Path;
-use Innmind\OperatingSystem\Remote;
+use Innmind\OperatingSystem\{
+    Remote,
+    Ports,
+};
 use PHPUnit\Framework\TestCase;
 
 class BootstrapTest extends TestCase
@@ -17,6 +20,7 @@ class BootstrapTest extends TestCase
         $commands = bootstrap(
             $this->createMock(Server::class),
             $this->createMock(Remote::class),
+            $this->createMock(Ports::class),
             new Path('config/config.yml.dist')
         );
 

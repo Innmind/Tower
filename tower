@@ -30,7 +30,12 @@ new class extends Main {
             $env->variables()['TOWER_CONFIG'] ?? $env->workingDirectory().'/tower.yml'
         );
 
-        $run = bootstrap($os->control(), $os->remote(), $path);
+        $run = bootstrap(
+            $os->control(),
+            $os->remote(),
+            $os->ports(),
+            $path
+        );
         $run($env);
     }
 };

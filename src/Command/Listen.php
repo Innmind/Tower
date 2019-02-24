@@ -14,20 +14,22 @@ use Innmind\Server\Control\{
     Server\Command as ServerCommand,
 };
 use Innmind\Socket\{
-    Server\Internet,
     Internet\Transport,
     Loop,
 };
+use Innmind\OperatingSystem\Ports;
 use Innmind\IP\IPv4;
 use Innmind\Url\Authority\Port;
 
 final class Listen implements Command
 {
+    private $ports;
     private $server;
     private $loop;
 
-    public function __construct(Server $server, Loop $loop)
+    public function __construct(Ports $ports, Server $server, Loop $loop)
     {
+        $this->ports = $ports;
         $this->server = $server;
         $this->loop = $loop;
     }
@@ -50,7 +52,7 @@ final class Listen implements Command
 
         do {
             try {
-                $socket = new Internet(
+                $socket = $this->ports->open(
                     Transport::tcp(),
                     new IPv4('127.0.0.1'),
                     new Port((int) $arguments->get('port'))

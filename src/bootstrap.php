@@ -10,7 +10,10 @@ use Innmind\Socket\{
     Event\DataReceived,
 };
 use Innmind\CLI\Commands;
-use Innmind\OperatingSystem\Remote;
+use Innmind\OperatingSystem\{
+    Remote,
+    Ports,
+};
 use Innmind\EventBus\EventBus;
 use Innmind\TimeContinuum\ElapsedPeriod;
 use Innmind\Immutable\{
@@ -22,6 +25,7 @@ use Innmind\Immutable\{
 function bootstrap(
     Server $server,
     Remote $remote,
+    Ports $ports,
     PathInterface $config
 ): Commands {
     $configuration = (new Configuration\Yaml)($config);
@@ -43,6 +47,6 @@ function bootstrap(
     return new Commands(
         new Command\Trigger($run),
         new Command\Ping($configuration, $ping),
-        new Command\Listen($server, $loop)
+        new Command\Listen($ports, $server, $loop)
     );
 }
