@@ -26,11 +26,9 @@ use function Innmind\Tower\bootstrap;
 new class extends Main {
     protected function main(Environment $env, OperatingSystem $os): void
     {
-        $path = new Path($env->workingDirectory().'/tower.yml');
-
-        if ($env->variables()->contains('TOWER_CONFIG')) {
-            $path = new Path($env->variables()->get('TOWER_CONFIG'));
-        }
+        $path = new Path(
+            $env->variables()['TOWER_CONFIG'] ?? $env->workingDirectory().'/tower.yml'
+        );
 
         $run = bootstrap($os->control(), $path);
         $run($env);
