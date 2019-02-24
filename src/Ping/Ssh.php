@@ -7,30 +7,23 @@ use Innmind\Tower\{
     Ping,
     Neighbour,
 };
-use Innmind\Server\Control\{
-    Server,
-    Server\Command,
-    Servers\Remote,
-};
+use Innmind\OperatingSystem\Remote;
+use Innmind\Server\Control\Server\Command;
 
 final class Ssh implements Ping
 {
-    private $server;
+    private $remote;
 
-    public function __construct(Server $server)
+    public function __construct(Remote $remote)
     {
-        $this->server = $server;
+        $this->remote = $remote;
     }
 
     public function __invoke(Neighbour $neighbour, string ...$tags): void
     {
-        $server = new Remote(
-            $this->server,
-            $neighbour->url()->authority()->userInformation()->user(),
-            $neighbour->url()->authority()->host(),
-            $neighbour->url()->authority()->port()
-        );
-        $server
+        $server = $this
+            ->remote
+            ->ssh($neighbour->url())
             ->processes()
             ->execute(
                 Command::background('tower')

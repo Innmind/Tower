@@ -10,6 +10,7 @@ use Innmind\Tower\{
     Neighbour\Name,
 };
 use Innmind\Url\Url;
+use Innmind\OperatingSystem\Remote;
 use Innmind\Server\Control\{
     Server,
     Server\Processes,
@@ -22,15 +23,25 @@ class SshTest extends TestCase
     {
         $this->assertInstanceOf(
             Ping::class,
-            new Ssh($this->createMock(Server::class))
+            new Ssh($this->createMock(Remote::class))
         );
     }
 
     public function testInvoke()
     {
-        $ping = new Ssh(
-            $server = $this->createMock(Server::class)
+        $neighbour = new Neighbour(
+            new Name('foo'),
+            Url::fromString('ssh://baptouuuu@example.com:1337/path/to/config')
         );
+
+        $ping = new Ssh(
+            $remote = $this->createMock(Remote::class)
+        );
+        $remote
+            ->expects($this->once())
+            ->method('ssh')
+            ->with($neighbour->url())
+            ->willReturn($server = $this->createMock(Server::class));
         $server
             ->expects($this->once())
             ->method('processes')
@@ -39,12 +50,10 @@ class SshTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->callback(static function($command): bool {
-                return (string) $command === "ssh '-p' '1337' 'baptouuuu@example.com' 'cd /path/to/config && tower '\''trigger'\'' '\''--tags=foo,bar'\'''";
+                return (string) $command === "tower 'trigger' '--tags=foo,bar'"
+                    && $command->workingDirectory() === '/path/to/config';
             }));
 
-        $this->assertNull($ping(new Neighbour(
-            new Name('foo'),
-            Url::fromString('ssh://baptouuuu@example.com:1337/path/to/config')
-        ), 'foo', 'bar'));
+        $this->assertNull($ping($neighbour, 'foo', 'bar'));
     }
 }

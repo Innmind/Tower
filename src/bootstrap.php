@@ -31,7 +31,7 @@ function bootstrap(
     $ping = new Ping\Delegate(
         Map::of('string', Ping::class)
             ('tcp', new Ping\Tcp($remote))
-            ('ssh', new Ping\Ssh($server))
+            ('ssh', new Ping\Ssh($remote))
     );
 
     $run = new Run($server, $configuration, $ping);
