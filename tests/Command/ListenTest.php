@@ -23,7 +23,7 @@ use Innmind\Socket\{
     Client\Internet,
     Internet\Transport,
 };
-use Innmind\EventBus\EventBusInterface;
+use Innmind\EventBus\EventBus;
 use Innmind\TimeContinuum\ElapsedPeriod;
 use Innmind\Url\{
     Path,
@@ -44,7 +44,7 @@ class ListenTest extends TestCase
             new Listen(
                 $this->createMock(Server::class),
                 new Loop(
-                    $this->createMock(EventBusInterface::class),
+                    $this->createMock(EventBus::class),
                     new ElapsedPeriod(42)
                 )
             )
@@ -56,7 +56,7 @@ class ListenTest extends TestCase
         $listen = new Listen(
             $server = $this->createMock(Server::class),
             new Loop(
-                $this->createMock(EventBusInterface::class),
+                $this->createMock(EventBus::class),
                 new ElapsedPeriod(42)
             )
         );
@@ -135,7 +135,7 @@ USAGE;
             (string) new Listen(
                 $this->createMock(Server::class),
                 new Loop(
-                    $this->createMock(EventBusInterface::class),
+                    $this->createMock(EventBus::class),
                     new ElapsedPeriod(42)
                 )
             )

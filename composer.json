@@ -21,7 +21,7 @@
         "symfony/config": "^4.0",
         "symfony/yaml": "^4.0",
         "innmind/server-control": "^2.2",
-        "innmind/socket": "^1.2",
+        "innmind/socket": "^2.0",
         "innmind/cli": "^1.2"
     },
     "autoload": {

@@ -36,9 +36,9 @@ function bootstrap(
 
     $run = new Run($server, $configuration, $ping);
     $loop = new Loop(
-        new EventBus(
-            Map::of('string', SetInterface::class)
-                (DataReceived::class, Set::of('callable', new Listener\Ping($run)))
+        new EventBus\Map(
+            Map::of('string', 'callable')
+                (DataReceived::class, new Listener\Ping($run))
         ),
         new ElapsedPeriod(3600000) // 1 hour
     );
