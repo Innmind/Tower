@@ -38,11 +38,6 @@ final class Configuration
         $this->actions = $actions;
     }
 
-    public static function load(PathInterface $path, Loader $load): self
-    {
-        return $load($path);
-    }
-
     /**
      * @return SetInterface<Neighbour>
      */

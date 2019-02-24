@@ -23,12 +23,13 @@ use Innmind\Socket\{
     Client\Internet,
     Internet\Transport,
 };
-use Innmind\EventBus\EventBusInterface;
+use Innmind\EventBus\EventBus;
 use Innmind\TimeContinuum\ElapsedPeriod;
 use Innmind\Url\{
     Path,
     Url,
 };
+use Innmind\OperatingSystem\Ports;
 use Innmind\Immutable\{
     Map,
     Str,
@@ -42,9 +43,10 @@ class ListenTest extends TestCase
         $this->assertInstanceOf(
             Command::class,
             new Listen(
+                $this->createMock(Ports::class),
                 $this->createMock(Server::class),
                 new Loop(
-                    $this->createMock(EventBusInterface::class),
+                    $this->createMock(EventBus::class),
                     new ElapsedPeriod(42)
                 )
             )
@@ -54,9 +56,10 @@ class ListenTest extends TestCase
     public function testDaemonize()
     {
         $listen = new Listen(
+            $this->createMock(Ports::class),
             $server = $this->createMock(Server::class),
             new Loop(
-                $this->createMock(EventBusInterface::class),
+                $this->createMock(EventBus::class),
                 new ElapsedPeriod(42)
             )
         );
@@ -133,9 +136,10 @@ USAGE;
         $this->assertSame(
             $expected,
             (string) new Listen(
+                $this->createMock(Ports::class),
                 $this->createMock(Server::class),
                 new Loop(
-                    $this->createMock(EventBusInterface::class),
+                    $this->createMock(EventBus::class),
                     new ElapsedPeriod(42)
                 )
             )

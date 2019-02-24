@@ -9,22 +9,20 @@ use Innmind\Tower\{
     Neighbour,
     Neighbour\Name,
 };
-use Innmind\Url\{
-    Url,
-    Authority\Port,
-};
+use Innmind\Url\Url;
 use Innmind\Socket\{
-    Server\Internet,
+    Client,
     Internet\Transport,
 };
-use Innmind\IP\IPv4;
+use Innmind\OperatingSystem\Remote;
+use Innmind\Immutable\Str;
 use PHPUnit\Framework\TestCase;
 
 class TcpTest extends TestCase
 {
     public function testInterface()
     {
-        $this->assertInstanceOf(Ping::class, new Tcp);
+        $this->assertInstanceOf(Ping::class, new Tcp($this->createMock(Remote::class)));
     }
 
     public function testInvoke()
@@ -33,21 +31,26 @@ class TcpTest extends TestCase
             new Name('foo'),
             Url::fromString('tcp://127.0.0.1:1338')
         );
-        $ping = new Tcp;
-        $socket = new Internet(
-            Transport::tcp(),
-            new IPv4('127.0.0.1'),
-            new Port(1338)
+        $ping = new Tcp(
+            $remote = $this->createMock(Remote::class)
         );
+        $remote
+            ->expects($this->once())
+            ->method('socket')
+            ->with(
+                Transport::tcp(),
+                $neighbour->url()->authority()
+            )
+            ->willReturn($client = $this->createMock(Client::class));
+        $client
+            ->expects($this->at(0))
+            ->method('write')
+            ->with(Str::of('{"tags":["foo","bar"]}'))
+            ->will($this->returnSelf());
+        $client
+            ->expects($this->at(1))
+            ->method('close');
 
         $this->assertNull($ping($neighbour, 'foo', 'bar'));
-        $connection = $socket->accept();
-        $data = $connection->read();
-        $connection->close();
-        $this->assertSame(
-            ['tags' => ['foo', 'bar']],
-            json_decode((string) $data, true)
-        );
-        $socket->close();
     }
 }

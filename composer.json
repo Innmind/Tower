@@ -21,13 +21,15 @@
         "symfony/config": "^4.0",
         "symfony/yaml": "^4.0",
         "innmind/server-control": "^2.2",
-        "innmind/socket": "^1.2",
-        "innmind/cli": "^1.2"
+        "innmind/socket": "^2.0",
+        "innmind/cli": "^1.2",
+        "innmind/json": "^1.1"
     },
     "autoload": {
         "psr-4": {
             "Innmind\\Tower\\": "src/"
-        }
+        },
+        "files": ["src/bootstrap.php"]
     },
     "autoload-dev": {
         "psr-4": {
@@ -36,8 +38,8 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "~6.0",
-        "giorgiosironi/eris": "^0.9.0"
+        "phpunit/phpunit": "~8.0",
+        "giorgiosironi/eris": "^0.11.0"
     },
     "scripts": {
         "test": "vendor/bin/phpunit --colors=always"
