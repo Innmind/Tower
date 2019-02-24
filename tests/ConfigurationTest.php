@@ -28,25 +28,6 @@ class ConfigurationTest extends TestCase
         $this->assertSame($actions, $conf->actions());
     }
 
-    public function testLoad()
-    {
-        $path = $this->createMock(PathInterface::class);
-        $loader = $this->createMock(Loader::class);
-        $loader
-            ->expects($this->once())
-            ->method('__invoke')
-            ->with($path)
-            ->willReturn($expected = new Configuration(
-                Set::of(Neighbour::class),
-                Set::of('string'),
-                Set::of('string')
-            ));
-
-        $conf = Configuration::load($path, $loader);
-
-        $this->assertSame($expected, $conf);
-    }
-
     public function testThrowWhenInvalidNeighbour()
     {
         $this->expectException(\TypeError::class);

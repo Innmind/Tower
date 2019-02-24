@@ -24,10 +24,7 @@ function bootstrap(
     Remote $remote,
     PathInterface $config
 ): Commands {
-    $configuration = Configuration::load(
-        $config,
-        new Configuration\Yaml
-    );
+    $configuration = (new Configuration\Yaml)($config);
     $ping = new Ping\Delegate(
         Map::of('string', Ping::class)
             ('tcp', new Ping\Tcp($remote))
