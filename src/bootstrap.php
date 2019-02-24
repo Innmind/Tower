@@ -9,9 +9,8 @@ use Innmind\Socket\{
     Loop,
     Event\DataReceived,
 };
-use Innmind\CLI\{
-    Commands,
-};
+use Innmind\CLI\Commands;
+use Innmind\OperatingSystem\Remote;
 use Innmind\EventBus\EventBus;
 use Innmind\TimeContinuum\ElapsedPeriod;
 use Innmind\Immutable\{
@@ -22,6 +21,7 @@ use Innmind\Immutable\{
 
 function bootstrap(
     Server $server,
+    Remote $remote,
     PathInterface $config
 ): Commands {
     $configuration = Configuration::load(
@@ -30,7 +30,7 @@ function bootstrap(
     );
     $ping = new Ping\Delegate(
         Map::of('string', Ping::class)
-            ('tcp', new Ping\Tcp)
+            ('tcp', new Ping\Tcp($remote))
             ('ssh', new Ping\Ssh($server))
     );
 
