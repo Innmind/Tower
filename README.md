@@ -110,9 +110,3 @@ neighbours:
 On the server you need to create a similar file named `tower.yml` containing either the actions to run or the neighbours to ping; then in this folder run `tower listen 1337 -d`. This last command opens a tcp connection on port `1337` and waits for incoming pings.
 
 Now you can run on your machine `tower ping gateway`.
-
-## Tech
-
-Below is the dependency graph of this tool in case you want to understand the inner working.
-
-![](graph.svg)
