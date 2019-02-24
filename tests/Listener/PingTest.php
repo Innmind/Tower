@@ -20,6 +20,7 @@ use Innmind\Socket\{
     Server\Connection,
 };
 use Innmind\Url\Url;
+use Innmind\Json\Json;
 use Innmind\Immutable\{
     Set,
     Str,
@@ -35,7 +36,7 @@ class PingTest extends TestCase
     {
         $event = new DataReceived(
             $this->createMock(Connection::class),
-            Str::of(json_encode($payload))
+            Str::of(Json::encode($payload))
         );
         $server = $this->createMock(Server::class);
         $server
@@ -64,7 +65,7 @@ class PingTest extends TestCase
     {
         $event = new DataReceived(
             $this->createMock(Connection::class),
-            Str::of(json_encode(['tags' => ['foo', 'bar']]))
+            Str::of(Json::encode(['tags' => ['foo', 'bar']]))
         );
         $ping = new Ping(
             new Run(

@@ -9,6 +9,7 @@ use Innmind\Tower\{
 };
 use Innmind\Socket\Internet\Transport;
 use Innmind\OperatingSystem\Remote;
+use Innmind\Json\Json;
 use Innmind\Immutable\Str;
 
 final class Tcp implements Ping
@@ -28,7 +29,7 @@ final class Tcp implements Ping
                 Transport::tcp(),
                 $neighbour->url()->authority()
             )
-            ->write(Str::of(json_encode([
+            ->write(Str::of(Json::encode([
                 'tags' => $tags,
             ])))
             ->close();
