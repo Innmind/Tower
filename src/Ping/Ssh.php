@@ -21,7 +21,7 @@ final class Ssh implements Ping
 
     public function __invoke(Neighbour $neighbour, string ...$tags): void
     {
-        $server = $this
+        $this
             ->remote
             ->ssh($neighbour->url())
             ->processes()
