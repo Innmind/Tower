@@ -27,7 +27,8 @@
     "autoload": {
         "psr-4": {
             "Innmind\\Tower\\": "src/"
-        }
+        },
+        "files": ["src/bootstrap.php"]
     },
     "autoload-dev": {
         "psr-4": {

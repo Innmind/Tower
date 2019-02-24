@@ -19,10 +19,9 @@ use Innmind\CLI\{
     Main,
     Environment,
 };
-use Innmind\Compose\ContainerBuilder\ContainerBuilder;
 use Innmind\Url\Path;
 use Innmind\OperatingSystem\OperatingSystem;
-use Innmind\Immutable\Map;
+use function Innmind\Tower\bootstrap;
 
 new class extends Main {
     protected function main(Environment $env, OperatingSystem $os): void
@@ -33,13 +32,7 @@ new class extends Main {
             $path = new Path($env->variables()->get('TOWER_CONFIG'));
         }
 
-        $container = (new ContainerBuilder)(
-            new Path(__DIR__.'/config/container.yml'),
-            (new Map('string', 'mixed'))
-                ->put('configPath', $path)
-        );
-
-        $run = $container->get('commands');
+        $run = bootstrap($os->control(), $path);
         $run($env);
     }
 };
