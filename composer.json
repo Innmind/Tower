@@ -23,7 +23,8 @@
         "innmind/server-control": "^2.2",
         "innmind/socket": "^2.0",
         "innmind/cli": "^1.2",
-        "innmind/json": "^1.1"
+        "innmind/json": "^1.1",
+        "innmind/silent-cartographer": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -44,5 +45,11 @@
     "scripts": {
         "test": "vendor/bin/phpunit --colors=always"
     },
-    "bin": ["tower"]
+    "bin": ["tower"],
+    "extra": {
+        "gene": {
+            "expression": ["tower listen 1337 --daemon"],
+            "mutation": ["tower listen 1337 --daemon --restart"]
+        }
+    }
 }
