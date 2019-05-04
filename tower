@@ -19,13 +19,18 @@ use Innmind\CLI\{
     Main,
     Environment,
 };
-use Innmind\Url\Path;
+use Innmind\Url\{
+    Url,
+    Path,
+};
 use Innmind\OperatingSystem\OperatingSystem;
 use function Innmind\Tower\bootstrap;
+use function Innmind\SilentCartographer\bootstrap as cartographer;
 
 new class extends Main {
     protected function main(Environment $env, OperatingSystem $os): void
     {
+        $os = cartographer($os)['cli'](Url::fromString(__DIR__));
         $path = new Path(
             $env->variables()['TOWER_CONFIG'] ?? $env->workingDirectory().'/tower.yml'
         );
