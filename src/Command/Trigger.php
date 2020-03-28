@@ -11,14 +11,14 @@ use Innmind\CLI\{
     Environment,
 };
 use Innmind\Immutable\{
-    SetInterface,
     Set,
     Str,
 };
+use function Innmind\Immutable\unwrap;
 
 final class Trigger implements Command
 {
-    private $run;
+    private Run $run;
 
     public function __construct(Run $run)
     {
@@ -27,26 +27,13 @@ final class Trigger implements Command
 
     public function __invoke(Environment $env, Arguments $arguments, Options $options): void
     {
-        $tags = [];
-
-        if ($options->contains('tags')) {
-            $tags = Str::of($options->get('tags'))
-                ->split(',')
-                ->reduce(
-                    Set::of('string'),
-                    static function(SetInterface $tags, Str $tag): SetInterface {
-                        return $tags->add((string) $tag->trim());
-                    }
-                );
-        }
-
-        ($this->run)(...$tags);
+        ($this->run)(...unwrap($arguments->pack()));
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return <<<USAGE
-trigger --tags=
+trigger ...tags
 
 Will call the actions configured to happen when this server is pinged
 

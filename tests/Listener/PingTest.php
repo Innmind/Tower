@@ -16,7 +16,7 @@ use Innmind\Server\Control\{
     Server\Processes,
 };
 use Innmind\Socket\{
-    Event\DataReceived,
+    Event\ConnectionReady,
     Server\Connection,
 };
 use Innmind\Url\Url;
@@ -34,10 +34,13 @@ class PingTest extends TestCase
      */
     public function testDoesNothingWhenInvalidPayload($payload)
     {
-        $event = new DataReceived(
-            $this->createMock(Connection::class),
-            Str::of(Json::encode($payload))
+        $event = new ConnectionReady(
+            $connection = $this->createMock(Connection::class),
         );
+        $connection
+            ->expects($this->once())
+            ->method('read')
+            ->willReturn(Str::of(Json::encode($payload)));
         $server = $this->createMock(Server::class);
         $server
             ->expects($this->once())
@@ -63,10 +66,13 @@ class PingTest extends TestCase
 
     public function testRun()
     {
-        $event = new DataReceived(
-            $this->createMock(Connection::class),
-            Str::of(Json::encode(['tags' => ['foo', 'bar']]))
+        $event = new ConnectionReady(
+            $connection = $this->createMock(Connection::class),
         );
+        $connection
+            ->expects($this->once())
+            ->method('read')
+            ->willReturn(Str::of(Json::encode(['tags' => ['foo', 'bar']])));
         $ping = new Ping(
             new Run(
                 $this->createMock(Server::class),
@@ -75,7 +81,7 @@ class PingTest extends TestCase
                         Neighbour::class,
                         $expected = new Neighbour(
                             new Name('watev'),
-                            Url::fromString('example.com'),
+                            Url::of('example.com'),
                             'foo'
                         )
                     ),

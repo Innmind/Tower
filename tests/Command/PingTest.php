@@ -20,6 +20,7 @@ use Innmind\Url\Url;
 use Innmind\Immutable\{
     Set,
     Map,
+    Sequence,
 };
 use PHPUnit\Framework\TestCase;
 
@@ -48,11 +49,11 @@ class PingTest extends TestCase
                     Neighbour::class,
                     new Neighbour(
                         new Name('foo'),
-                        Url::fromString('example.com')
+                        Url::of('example.com')
                     ),
                     $expected = new Neighbour(
                         new Name('bar'),
-                        Url::fromString('example2.com')
+                        Url::of('example2.com')
                     )
                 ),
                 Set::of('string'),
@@ -68,20 +69,18 @@ class PingTest extends TestCase
         $this->assertNull($ping(
             $this->createMock(Environment::class),
             new Arguments(
-                (new Map('string', 'mixed'))
-                    ->put('server', 'bar')
+                Map::of('string', 'string')
+                    ('server', 'bar'),
+                Sequence::strings('foobar', 'baz'),
             ),
-            new Options(
-                (new Map('string', 'mixed'))
-                    ->put('tags', 'foobar , baz')
-            )
+            new Options,
         ));
     }
 
     public function testUsage()
     {
         $expected = <<<USAGE
-ping server --tags=
+ping server ...tags
 
 Send a ping to a configured server in order to trigger its behaviour
 
@@ -92,14 +91,14 @@ USAGE;
 
         $this->assertSame(
             $expected,
-            (string) new Ping(
+            (new Ping(
                 new Configuration(
                     Set::of(Neighbour::class),
                     Set::of('string'),
                     Set::of('string')
                 ),
                 $this->createMock(ServerPing::class)
-            )
+            ))->toString()
         );
     }
 }

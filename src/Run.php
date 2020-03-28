@@ -15,9 +15,9 @@ use Innmind\Immutable\{
 
 final class Run
 {
-    private $processes;
-    private $configuration;
-    private $ping;
+    private Server\Processes $processes;
+    private Configuration $configuration;
+    private Ping $ping;
 
     public function __construct(
         Server $server,
@@ -41,11 +41,12 @@ final class Run
                     static function(Command $command, EnvironmentVariable $env): Command {
                         return $command->withEnvironment(
                             $env->name(),
-                            $env->value()
+                            $env->value(),
                         );
-                    }
+                    },
                 );
-                $process = $this->processes->execute($command)->wait();
+                $process = $this->processes->execute($command);
+                $process->wait();
 
                 if (!$process->exitCode()->isSuccessful()) {
                     throw new ActionFailed($action, $process);
@@ -67,6 +68,7 @@ final class Run
      */
     private function envs(): Set
     {
+        /** @var Set<EnvironmentVariable> */
         return $this->configuration->exports()->reduce(
             Set::of(EnvironmentVariable::class),
             function(Set $envs, string $command): Set {
@@ -75,20 +77,18 @@ final class Run
                     static function(Command $command, EnvironmentVariable $env): Command {
                         return $command->withEnvironment(
                             $env->name(),
-                            $env->value()
+                            $env->value(),
                         );
-                    }
+                    },
                 );
-                $output = (string) $this
-                    ->processes
-                    ->execute($command)
-                    ->wait()
-                    ->output();
+                $process = $this->processes->execute($command);
+                $process->wait();
+                $output = $process->output()->toString();
 
-                return $envs->add(new EnvironmentVariable(
-                    (string) Str::of($output)->trim()
+                return ($envs)(new EnvironmentVariable(
+                    Str::of($output)->trim()->toString(),
                 ));
-            }
+            },
         );
     }
 }

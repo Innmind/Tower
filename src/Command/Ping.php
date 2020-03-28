@@ -15,15 +15,18 @@ use Innmind\CLI\{
     Environment,
 };
 use Innmind\Immutable\{
-    SetInterface,
     Set,
     Str,
+};
+use function Innmind\Immutable\{
+    first,
+    unwrap,
 };
 
 final class Ping implements Command
 {
-    private $configuration;
-    private $ping;
+    private Configuration $configuration;
+    private ServerPing $ping;
 
     public function __construct(Configuration $configuration, ServerPing $ping)
     {
@@ -34,34 +37,20 @@ final class Ping implements Command
     public function __invoke(Environment $env, Arguments $arguments, Options $options): void
     {
         $name = $arguments->get('server');
-        $neighbour = $this
+        $neighbour = first($this
             ->configuration
             ->neighbours()
             ->filter(static function(Neighbour $neighbour) use ($name): bool {
-                return (string) $neighbour->name() === $name;
-            })
-            ->current();
+                return $neighbour->name()->toString() === $name;
+            }));
 
-        $tags = [];
-
-        if ($options->contains('tags')) {
-            $tags = Str::of($options->get('tags'))
-                ->split(',')
-                ->reduce(
-                    Set::of('string'),
-                    static function(SetInterface $tags, Str $tag): SetInterface {
-                        return $tags->add((string) $tag->trim());
-                    }
-                );
-        }
-
-        ($this->ping)($neighbour, ...$tags);
+        ($this->ping)($neighbour, ...unwrap($arguments->pack()));
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return <<<USAGE
-ping server --tags=
+ping server ...tags
 
 Send a ping to a configured server in order to trigger its behaviour
 

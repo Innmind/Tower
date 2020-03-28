@@ -7,7 +7,7 @@ use Innmind\Server\Control\Server\Process;
 
 final class ActionFailed extends RuntimeException
 {
-    private $process;
+    private Process $process;
 
     public function __construct(string $action, Process $process)
     {

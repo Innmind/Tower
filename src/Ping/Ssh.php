@@ -12,7 +12,7 @@ use Innmind\Server\Control\Server\Command;
 
 final class Ssh implements Ping
 {
-    private $remote;
+    private Remote $remote;
 
     public function __construct(Remote $remote)
     {
@@ -29,7 +29,7 @@ final class Ssh implements Ping
                 Command::background('tower')
                     ->withArgument('trigger')
                     ->withOption('tags', implode(',', $tags))
-                    ->withWorkingDirectory((string) $neighbour->url()->path())
+                    ->withWorkingDirectory($neighbour->url()->path()),
             );
     }
 }

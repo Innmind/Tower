@@ -21,7 +21,7 @@ class DelegateTest extends TestCase
         $this->assertInstanceOf(
             Ping::class,
             new Delegate(
-                new Map('string', Ping::class)
+                Map::of('string', Ping::class)
             )
         );
     }
@@ -29,28 +29,28 @@ class DelegateTest extends TestCase
     public function testThrowWhenInvalidPingKey()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Argument 1 must be of type MapInterface<string, Innmind\Tower\Ping>');
+        $this->expectExceptionMessage('Argument 1 must be of type Map<string, Innmind\Tower\Ping>');
 
-        new Delegate(new Map('int', Ping::class));
+        new Delegate(Map::of('int', Ping::class));
     }
 
     public function testThrowWhenInvalidPingValue()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Argument 1 must be of type MapInterface<string, Innmind\Tower\Ping>');
+        $this->expectExceptionMessage('Argument 1 must be of type Map<string, Innmind\Tower\Ping>');
 
-        new Delegate(new Map('string', 'callable'));
+        new Delegate(Map::of('string', 'callable'));
     }
 
     public function testInvoke()
     {
         $neighbour = new Neighbour(
             new Name('foo'),
-            Url::fromString('tcp://host.com')
+            Url::of('tcp://host.com')
         );
         $tags = ['foo', 'bar'];
         $ping = new Delegate(
-            (new Map('string', Ping::class))
+            (Map::of('string', Ping::class))
                 ->put('ssh', $mock1 = $this->createMock(Ping::class))
                 ->put('tcp', $mock2 = $this->createMock(Ping::class))
         );
@@ -70,11 +70,11 @@ class DelegateTest extends TestCase
         $this->expectException(SchemeNotSupported::class);
         $this->expectExceptionMessage('tcp');
 
-        $ping = new Delegate(new Map('string', Ping::class));
+        $ping = new Delegate(Map::of('string', Ping::class));
 
         $ping(new Neighbour(
             new Name('foo'),
-            Url::fromString('tcp://example.com')
+            Url::of('tcp://example.com')
         ));
     }
 }

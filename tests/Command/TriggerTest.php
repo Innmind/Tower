@@ -22,6 +22,7 @@ use Innmind\Server\Control\Server;
 use Innmind\Immutable\{
     Set,
     Map,
+    Sequence,
 };
 use PHPUnit\Framework\TestCase;
 
@@ -55,7 +56,7 @@ class TriggerTest extends TestCase
                         Neighbour::class,
                         $neighbour = new Neighbour(
                             new Name('foo'),
-                            Url::fromString('example.com'),
+                            Url::of('example.com'),
                             'foo'
                         )
                     ),
@@ -72,18 +73,18 @@ class TriggerTest extends TestCase
 
         $this->assertNull($trigger(
             $this->createMock(Environment::class),
-            new Arguments,
-            new Options(
-                (new Map('string', 'mixed'))
-                    ->put('tags', 'foo , bar')
-            )
+            new Arguments(
+                null,
+                Sequence::strings('foo', 'bar'),
+            ),
+            new Options,
         ));
     }
 
     public function testUsage()
     {
         $expected = <<<USAGE
-trigger --tags=
+trigger ...tags
 
 Will call the actions configured to happen when this server is pinged
 
@@ -93,7 +94,7 @@ USAGE;
 
         $this->assertSame(
             $expected,
-            (string) new Trigger(
+            (new Trigger(
                 new Run(
                     $this->createMock(Server::class),
                     new Configuration(
@@ -103,7 +104,7 @@ USAGE;
                     ),
                     $this->createMock(Ping::class)
                 )
-            )
+            ))->toString()
         );
     }
 }

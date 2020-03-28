@@ -30,16 +30,20 @@ use function Innmind\SilentCartographer\bootstrap as cartographer;
 new class extends Main {
     protected function main(Environment $env, OperatingSystem $os): void
     {
-        $os = cartographer($os)['cli'](Url::fromString(__DIR__));
-        $path = new Path(
-            $env->variables()['TOWER_CONFIG'] ?? $env->workingDirectory().'/tower.yml'
-        );
+        $os = cartographer($os)['cli'](Url::of(__DIR__));
+
+        $path = $env->workingDirectory()->resolve(Path::of('tower.yml'));
+
+        if ($env->variables()->contains('TOWER_CONFIG')) {
+            $path = Path::of($env->variables()->get('TOWER_CONFIG'));
+        }
 
         $run = bootstrap(
             $os->control(),
             $os->remote(),
             $os->ports(),
-            $path
+            $os->sockets(),
+            $path,
         );
         $run($env);
     }

@@ -4,23 +4,21 @@ declare(strict_types = 1);
 namespace Innmind\Tower;
 
 use Innmind\Tower\Neighbour\Name;
-use Innmind\Url\UrlInterface;
-use Innmind\Immutable\{
-    SetInterface,
-    Set,
-};
+use Innmind\Url\Url;
+use Innmind\Immutable\Set;
 
 final class Neighbour
 {
-    private $name;
-    private $url;
-    private $tags;
+    private Name $name;
+    private Url $url;
+    /** @var Set<string> */
+    private Set $tags;
 
-    public function __construct(Name $name, UrlInterface $url, string ...$tags)
+    public function __construct(Name $name, Url $url, string ...$tags)
     {
         $this->name = $name;
         $this->url = $url;
-        $this->tags = Set::of('string', ...$tags);
+        $this->tags = Set::strings(...$tags);
     }
 
     public function name(): Name
@@ -28,27 +26,27 @@ final class Neighbour
         return $this->name;
     }
 
-    public function url(): UrlInterface
+    public function url(): Url
     {
         return $this->url;
     }
 
     /**
-     * @return SetInterface<string>
+     * @return Set<string>
      */
-    public function tags(): SetInterface
+    public function tags(): Set
     {
         return $this->tags;
     }
 
     public function matches(string ...$tags): bool
     {
-        $tags = Set::of('string', ...$tags);
+        $tags = Set::strings(...$tags);
 
-        if ($tags->size() === 0) {
+        if ($tags->empty()) {
             return true;
         }
 
-        return $this->tags->intersect($tags)->size() > 0;
+        return !$this->tags->intersect($tags)->empty();
     }
 }

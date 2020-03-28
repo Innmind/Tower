@@ -10,7 +10,7 @@ use Innmind\Tower\{
 };
 use Innmind\Url\{
     Url,
-    PathInterface,
+    Path,
 };
 use Innmind\Immutable\Set;
 use Symfony\Component\Config\Definition\Processor;
@@ -18,8 +18,8 @@ use Symfony\Component\Yaml\Yaml as Parser;
 
 final class Yaml implements Loader
 {
-    private $processor;
-    private $config;
+    private Processor $processor;
+    private Schema $config;
 
     public function __construct()
     {
@@ -27,29 +27,31 @@ final class Yaml implements Loader
         $this->config = new Schema;
     }
 
-    public function __invoke(PathInterface $configPath): Configuration
+    public function __invoke(Path $configPath): Configuration
     {
+        /** @var array{neighbours: array<string, array{url: string, tags: list<string>}>, exports: list<string>, actions: list<string>} */
         $config = $this->processor->processConfiguration(
             $this->config,
-            [Parser::parseFile((string) $configPath)]
+            [Parser::parseFile($configPath->toString())],
         );
+        /** @var Set<Neighbour> */
         $neighbours = Set::of(Neighbour::class);
 
         foreach ($config['neighbours'] as $name => $value) {
-            $neighbours = $neighbours->add(
+            $neighbours = ($neighbours)(
                 new Neighbour(
                     new Name($name),
-                    Url::fromString($value['url']),
-                    ...$value['tags']
-                )
+                    Url::of($value['url']),
+                    ...$value['tags'],
+                ),
             );
         }
 
 
         return new Configuration(
             $neighbours,
-            Set::of('string', ...$config['exports']),
-            Set::of('string', ...$config['actions'])
+            Set::strings(...$config['exports']),
+            Set::strings(...$config['actions']),
         );
     }
 }

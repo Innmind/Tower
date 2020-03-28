@@ -4,34 +4,31 @@ declare(strict_types = 1);
 namespace Innmind\Tower;
 
 use Innmind\Tower\Configuration\Loader;
-use Innmind\Url\PathInterface;
-use Innmind\Immutable\SetInterface;
+use Innmind\Immutable\Set;
+use function Innmind\Immutable\assertSet;
 
 final class Configuration
 {
-    private $neighbours;
-    private $exports;
-    private $actions;
+    /** @var Set<Neighbour> */
+    private Set $neighbours;
+    /** @var Set<string> */
+    private Set $exports;
+    /** @var Set<string> */
+    private Set $actions;
 
+    /**
+     * @param Set<Neighbour> $neighbours
+     * @param Set<string> $exports
+     * @param Set<string> $actions
+     */
     public function __construct(
-        SetInterface $neighbours,
-        SetInterface $exports,
-        SetInterface $actions
+        Set $neighbours,
+        Set $exports,
+        Set $actions
     ) {
-        if ((string) $neighbours->type() !== Neighbour::class) {
-            throw new \TypeError(sprintf(
-                'Argument 1 must be of type SetInterface<%s>',
-                Neighbour::class
-            ));
-        }
-
-        if ((string) $exports->type() !== 'string') {
-            throw new \TypeError('Argument 2 must be of type SetInterface<string>');
-        }
-
-        if ((string) $actions->type() !== 'string') {
-            throw new \TypeError('Argument 3 must be of type SetInterface<string>');
-        }
+        assertSet(Neighbour::class, $neighbours, 1);
+        assertSet('string', $exports, 2);
+        assertSet('string', $actions, 3);
 
         $this->neighbours = $neighbours;
         $this->exports = $exports;
@@ -39,25 +36,25 @@ final class Configuration
     }
 
     /**
-     * @return SetInterface<Neighbour>
+     * @return Set<Neighbour>
      */
-    public function neighbours(): SetInterface
+    public function neighbours(): Set
     {
         return $this->neighbours;
     }
 
     /**
-     * @return SetInterface<string>
+     * @return Set<string>
      */
-    public function exports(): SetInterface
+    public function exports(): Set
     {
         return $this->exports;
     }
 
     /**
-     * @return SetInterface<string>
+     * @return Set<string>
      */
-    public function actions(): SetInterface
+    public function actions(): Set
     {
         return $this->actions;
     }

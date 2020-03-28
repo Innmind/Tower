@@ -7,8 +7,9 @@ use Innmind\Tower\{
     Neighbour,
     Neighbour\Name,
 };
-use Innmind\Url\UrlInterface;
-use Innmind\Immutable\SetInterface;
+use Innmind\Url\Url;
+use Innmind\Immutable\Set;
+use function Innmind\Immutable\unwrap;
 use PHPUnit\Framework\TestCase;
 
 class NeighbourTest extends TestCase
@@ -17,16 +18,16 @@ class NeighbourTest extends TestCase
     {
         $neighbour = new Neighbour(
             $name = new Name('foo'),
-            $url = $this->createMock(UrlInterface::class),
+            $url = Url::of('example.com'),
             'bar',
             'baz'
         );
 
         $this->assertSame($name, $neighbour->name());
         $this->assertSame($url, $neighbour->url());
-        $this->assertInstanceOf(SetInterface::class, $neighbour->tags());
+        $this->assertInstanceOf(Set::class, $neighbour->tags());
         $this->assertSame('string', (string) $neighbour->tags()->type());
-        $this->assertSame(['bar', 'baz'], $neighbour->tags()->toPrimitive());
+        $this->assertSame(['bar', 'baz'], unwrap($neighbour->tags()));
         $this->assertTrue($neighbour->matches('bar'));
         $this->assertTrue($neighbour->matches('baz'));
         $this->assertTrue($neighbour->matches('bar', 'baz'));

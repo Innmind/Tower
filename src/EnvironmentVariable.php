@@ -10,21 +10,21 @@ final class EnvironmentVariable
 {
     private const PATTERN = '~^(?<name>[A-Z0-9_]+)=(?<value>.*)$~';
 
-    private $name;
-    private $value;
+    private string $name;
+    private string $value;
 
     public function __construct(string $value)
     {
         $value = Str::of($value);
 
         if (!$value->matches(self::PATTERN)) {
-            throw new DomainException((string) $value);
+            throw new DomainException($value->toString());
         }
 
         $parts = $value->capture(self::PATTERN);
 
-        $this->name = (string) $parts->get('name');
-        $this->value = (string) $parts->get('value');
+        $this->name = $parts->get('name')->toString();
+        $this->value = $parts->get('value')->toString();
     }
 
     public function name(): string
