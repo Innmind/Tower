@@ -41,7 +41,7 @@ final class Ping implements Command
             ->configuration
             ->neighbours()
             ->filter(static function(Neighbour $neighbour) use ($name): bool {
-                return (string) $neighbour->name() === $name;
+                return $neighbour->name()->toString() === $name;
             }));
 
         ($this->ping)($neighbour, ...unwrap($arguments->pack()));

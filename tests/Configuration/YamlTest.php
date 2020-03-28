@@ -30,7 +30,7 @@ class YamlTest extends TestCase
         $this->assertCount(1, $config->neighbours());
         $this->assertSame(
             '_name_',
-            (string) first($config->neighbours())->name()
+            first($config->neighbours())->name()->toString()
         );
         $this->assertSame(
             'ssh://example.com:80/path/to/config/on/neighbour/server.yml',
