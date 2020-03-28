@@ -15,6 +15,10 @@ final class Schema implements ConfigurationInterface
         $builder = new TreeBuilder('tower');
         $root = $builder->getRootNode();
 
+        /**
+         * @psalm-suppress MixedMethodCall
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
         $root
             ->children()
                 ->arrayNode('exports')

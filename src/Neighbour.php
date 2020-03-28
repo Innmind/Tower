@@ -11,13 +11,14 @@ final class Neighbour
 {
     private Name $name;
     private Url $url;
+    /** @var Set<string> */
     private Set $tags;
 
     public function __construct(Name $name, Url $url, string ...$tags)
     {
         $this->name = $name;
         $this->url = $url;
-        $this->tags = Set::of('string', ...$tags);
+        $this->tags = Set::strings(...$tags);
     }
 
     public function name(): Name

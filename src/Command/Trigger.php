@@ -30,17 +30,17 @@ final class Trigger implements Command
         $tags = [];
 
         if ($options->contains('tags')) {
-            $tags = Str::of($options->get('tags'))
+            $tags = unwrap(Str::of($options->get('tags'))
                 ->split(',')
                 ->reduce(
                     Set::of('string'),
                     static function(Set $tags, Str $tag): Set {
                         return $tags->add($tag->trim()->toString());
                     }
-                );
+                ));
         }
 
-        ($this->run)(...unwrap($tags));
+        ($this->run)(...$tags);
     }
 
     public function toString(): string

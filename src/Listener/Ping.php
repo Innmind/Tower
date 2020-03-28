@@ -18,6 +18,7 @@ final class Ping
 
     public function __invoke(ConnectionReady $event): void
     {
+        /** @var array{tags?: list<string>}|mixed */
         $payload = Json::decode($event->connection()->read()->toString());
 
         if (!\is_array($payload)) {
@@ -32,6 +33,7 @@ final class Ping
             return;
         }
 
+        /** @psalm-suppress MixedArgument */
         ($this->run)(...$payload['tags']);
     }
 }

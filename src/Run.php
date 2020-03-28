@@ -68,6 +68,7 @@ final class Run
      */
     private function envs(): Set
     {
+        /** @var Set<EnvironmentVariable> */
         return $this->configuration->exports()->reduce(
             Set::of(EnvironmentVariable::class),
             function(Set $envs, string $command): Set {

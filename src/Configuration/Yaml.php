@@ -29,10 +29,12 @@ final class Yaml implements Loader
 
     public function __invoke(Path $configPath): Configuration
     {
+        /** @var array{neighbours: array<string, array{url: string, tags: list<string>}>, exports: list<string>, actions: list<string>} */
         $config = $this->processor->processConfiguration(
             $this->config,
             [Parser::parseFile($configPath->toString())]
         );
+        /** @var Set<Neighbour> */
         $neighbours = Set::of(Neighbour::class);
 
         foreach ($config['neighbours'] as $name => $value) {

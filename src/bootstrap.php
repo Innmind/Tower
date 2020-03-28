@@ -30,6 +30,10 @@ function bootstrap(
     Path $config
 ): Commands {
     $configuration = (new Configuration\Yaml)($config);
+    /**
+     * @psalm-suppress InvalidScalarArgument
+     * @psalm-suppress InvalidArgument
+     */
     $ping = new Ping\Delegate(
         Map::of('string', Ping::class)
             ('tcp', new Ping\Tcp($remote))
@@ -37,6 +41,10 @@ function bootstrap(
     );
 
     $run = new Run($server, $configuration, $ping);
+    /**
+     * @psalm-suppress InvalidScalarArgument
+     * @psalm-suppress InvalidArgument
+     */
     $loop = new Serve(
         new EventBus\Map(
             Map::of('string', 'callable')

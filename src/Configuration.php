@@ -8,10 +8,18 @@ use Innmind\Immutable\Set;
 
 final class Configuration
 {
+    /** @var Set<Neighbour> */
     private Set $neighbours;
+    /** @var Set<string> */
     private Set $exports;
+    /** @var Set<string> */
     private Set $actions;
 
+    /**
+     * @param Set<Neighbour> $neighbours
+     * @param Set<string> $exports
+     * @param Set<string> $actions
+     */
     public function __construct(
         Set $neighbours,
         Set $exports,

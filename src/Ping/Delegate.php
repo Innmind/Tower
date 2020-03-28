@@ -12,8 +12,12 @@ use Innmind\Immutable\Map;
 
 final class Delegate implements Ping
 {
+    /** @var Map<string, Ping> */
     private Map $pings;
 
+    /**
+     * @param Map<string, Ping> $pings
+     */
     public function __construct(Map $pings)
     {
         if (
