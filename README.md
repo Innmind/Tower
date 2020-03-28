@@ -1,10 +1,8 @@
 # Tower
 
-| `master` | `develop` |
-|----------|-----------|
-| [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Innmind/Tower/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Innmind/Tower/?branch=master) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Innmind/Tower/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/Innmind/Tower/?branch=develop) |
-| [![Code Coverage](https://scrutinizer-ci.com/g/Innmind/Tower/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Innmind/Tower/?branch=master) | [![Code Coverage](https://scrutinizer-ci.com/g/Innmind/Tower/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/Innmind/Tower/?branch=develop) |
-| [![Build Status](https://scrutinizer-ci.com/g/Innmind/Tower/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Innmind/Tower/build-status/master) | [![Build Status](https://scrutinizer-ci.com/g/Innmind/Tower/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/Innmind/Tower/build-status/develop) |
+[![Build Status](https://github.com/Innmind/Tower/workflows/CI/badge.svg)](https://github.com/Innmind/Tower/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/Innmind/Tower/branch/develop/graph/badge.svg)](https://codecov.io/gh/Innmind/Tower)
+[![Type Coverage](https://shepherd.dev/github/Innmind/Tower/coverage.svg)](https://shepherd.dev/github/Innmind/Tower)
 
 This is a command line tool to deploy your code base with a new approach. Instead of building another tool sending a set of shell commands over ssh with a logic of point to point, Tower takes the approach of servers as nodes of a tree where from a node you trigger the _tower_ of sub-nodes.
 
