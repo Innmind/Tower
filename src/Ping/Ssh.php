@@ -29,7 +29,7 @@ final class Ssh implements Ping
                 Command::background('tower')
                     ->withArgument('trigger')
                     ->withOption('tags', implode(',', $tags))
-                    ->withWorkingDirectory($neighbour->url()->path())
+                    ->withWorkingDirectory($neighbour->url()->path()),
             );
     }
 }

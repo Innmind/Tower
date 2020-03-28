@@ -41,9 +41,9 @@ final class Run
                     static function(Command $command, EnvironmentVariable $env): Command {
                         return $command->withEnvironment(
                             $env->name(),
-                            $env->value()
+                            $env->value(),
                         );
-                    }
+                    },
                 );
                 $process = $this->processes->execute($command);
                 $process->wait();
@@ -77,18 +77,18 @@ final class Run
                     static function(Command $command, EnvironmentVariable $env): Command {
                         return $command->withEnvironment(
                             $env->name(),
-                            $env->value()
+                            $env->value(),
                         );
-                    }
+                    },
                 );
                 $process = $this->processes->execute($command);
                 $process->wait();
                 $output = $process->output()->toString();
 
-                return $envs->add(new EnvironmentVariable(
+                return ($envs)(new EnvironmentVariable(
                     Str::of($output)->trim()->toString(),
                 ));
-            }
+            },
         );
     }
 }

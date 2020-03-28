@@ -37,7 +37,7 @@ function bootstrap(
     $ping = new Ping\Delegate(
         Map::of('string', Ping::class)
             ('tcp', new Ping\Tcp($remote))
-            ('ssh', new Ping\Ssh($remote))
+            ('ssh', new Ping\Ssh($remote)),
     );
 
     $run = new Run($server, $configuration, $ping);
@@ -48,7 +48,7 @@ function bootstrap(
     $loop = new Serve(
         new EventBus\Map(
             Map::of('string', 'callable')
-                (ConnectionReady::class, new Listener\Ping($run))
+                (ConnectionReady::class, new Listener\Ping($run)),
         ),
         $sockets->watch(new ElapsedPeriod(3600000)), // 1 hour
     );
@@ -56,6 +56,6 @@ function bootstrap(
     return new Commands(
         new Command\Trigger($run),
         new Command\Ping($configuration, $ping),
-        new Command\Listen($ports, $server, $loop)
+        new Command\Listen($ports, $server, $loop),
     );
 }

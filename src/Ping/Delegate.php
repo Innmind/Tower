@@ -9,6 +9,7 @@ use Innmind\Tower\{
     Exception\SchemeNotSupported,
 };
 use Innmind\Immutable\Map;
+use function Innmind\Immutable\assertMap;
 
 final class Delegate implements Ping
 {
@@ -20,15 +21,7 @@ final class Delegate implements Ping
      */
     public function __construct(Map $pings)
     {
-        if (
-            (string) $pings->keyType() !== 'string' ||
-            (string) $pings->valueType() !== Ping::class
-        ) {
-            throw new \TypeError(sprintf(
-                'Argument 1 must be of type Map<string, %s>',
-                Ping::class
-            ));
-        }
+        assertMap('string', Ping::class, $pings, 1);
 
         $this->pings = $pings;
     }

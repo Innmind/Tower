@@ -44,7 +44,7 @@ final class Listen implements Command
                     ServerCommand::background('tower')
                         ->withArgument('listen')
                         ->withArgument($arguments->get('port'))
-                        ->withWorkingDirectory($env->workingDirectory())
+                        ->withWorkingDirectory($env->workingDirectory()),
                 );
 
             return;
@@ -55,7 +55,7 @@ final class Listen implements Command
                 $socket = $this->ports->open(
                     Transport::tcp(),
                     IPv4::of('127.0.0.1'),
-                    Port::of((int) $arguments->get('port'))
+                    Port::of((int) $arguments->get('port')),
                 );
 
                 ($this->serve)($socket);

@@ -25,7 +25,7 @@ final class Tcp implements Ping
     {
         $socket = $this->remote->socket(
             Transport::tcp(),
-            $neighbour->url()->authority()
+            $neighbour->url()->authority(),
         );
         $socket->write(Str::of(Json::encode([
             'tags' => $tags,

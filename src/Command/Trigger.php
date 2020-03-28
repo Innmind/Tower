@@ -36,7 +36,7 @@ final class Trigger implements Command
                     Set::of('string'),
                     static function(Set $tags, Str $tag): Set {
                         return $tags->add($tag->trim()->toString());
-                    }
+                    },
                 ));
         }
 

@@ -41,12 +41,12 @@ final class Neighbour
 
     public function matches(string ...$tags): bool
     {
-        $tags = Set::of('string', ...$tags);
+        $tags = Set::strings(...$tags);
 
-        if ($tags->size() === 0) {
+        if ($tags->empty()) {
             return true;
         }
 
-        return $this->tags->intersect($tags)->size() > 0;
+        return !$this->tags->intersect($tags)->empty();
     }
 }

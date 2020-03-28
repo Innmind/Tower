@@ -32,26 +32,26 @@ final class Yaml implements Loader
         /** @var array{neighbours: array<string, array{url: string, tags: list<string>}>, exports: list<string>, actions: list<string>} */
         $config = $this->processor->processConfiguration(
             $this->config,
-            [Parser::parseFile($configPath->toString())]
+            [Parser::parseFile($configPath->toString())],
         );
         /** @var Set<Neighbour> */
         $neighbours = Set::of(Neighbour::class);
 
         foreach ($config['neighbours'] as $name => $value) {
-            $neighbours = $neighbours->add(
+            $neighbours = ($neighbours)(
                 new Neighbour(
                     new Name($name),
                     Url::of($value['url']),
-                    ...$value['tags']
-                )
+                    ...$value['tags'],
+                ),
             );
         }
 
 
         return new Configuration(
             $neighbours,
-            Set::of('string', ...$config['exports']),
-            Set::of('string', ...$config['actions'])
+            Set::strings(...$config['exports']),
+            Set::strings(...$config['actions']),
         );
     }
 }

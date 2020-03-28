@@ -5,6 +5,7 @@ namespace Innmind\Tower;
 
 use Innmind\Tower\Configuration\Loader;
 use Innmind\Immutable\Set;
+use function Innmind\Immutable\assertSet;
 
 final class Configuration
 {
@@ -25,20 +26,9 @@ final class Configuration
         Set $exports,
         Set $actions
     ) {
-        if ((string) $neighbours->type() !== Neighbour::class) {
-            throw new \TypeError(sprintf(
-                'Argument 1 must be of type Set<%s>',
-                Neighbour::class
-            ));
-        }
-
-        if ((string) $exports->type() !== 'string') {
-            throw new \TypeError('Argument 2 must be of type Set<string>');
-        }
-
-        if ((string) $actions->type() !== 'string') {
-            throw new \TypeError('Argument 3 must be of type Set<string>');
-        }
+        assertSet(Neighbour::class, $neighbours, 1);
+        assertSet('string', $exports, 2);
+        assertSet('string', $actions, 3);
 
         $this->neighbours = $neighbours;
         $this->exports = $exports;
