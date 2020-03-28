@@ -19,12 +19,12 @@ use Innmind\Server\Control\{
     Server\Command as ServerCommand,
 };
 use Innmind\Socket\{
-    Loop,
+    Serve,
     Client\Internet,
     Internet\Transport,
 };
+use Innmind\Stream\Watch;
 use Innmind\EventBus\EventBus;
-use Innmind\TimeContinuum\ElapsedPeriod;
 use Innmind\Url\{
     Path,
     Url,
@@ -45,9 +45,9 @@ class ListenTest extends TestCase
             new Listen(
                 $this->createMock(Ports::class),
                 $this->createMock(Server::class),
-                new Loop(
+                new Serve(
                     $this->createMock(EventBus::class),
-                    new ElapsedPeriod(42)
+                    $this->createMock(Watch::class),
                 )
             )
         );
@@ -58,9 +58,9 @@ class ListenTest extends TestCase
         $listen = new Listen(
             $this->createMock(Ports::class),
             $server = $this->createMock(Server::class),
-            new Loop(
+            new Serve(
                 $this->createMock(EventBus::class),
-                new ElapsedPeriod(42)
+                $this->createMock(Watch::class),
             )
         );
         $server
@@ -71,26 +71,26 @@ class ListenTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->callback(static function($command): bool {
-                return (string) $command === "tower 'listen' '1337'" &&
+                return $command->toString() === "tower 'listen' '1337'" &&
                     $command->toBeRunInBackground() &&
-                    $command->workingDirectory() === '/working/directory';
+                    $command->workingDirectory()->toString() === '/working/directory';
             }));
 
         $env = $this->createMock(Environment::class);
         $env
             ->expects($this->once())
             ->method('workingDirectory')
-            ->willReturn(new Path('/working/directory'));
+            ->willReturn(Path::of('/working/directory'));
 
         $this->assertNull($listen(
             $env,
             new Arguments(
-                (new Map('string', 'mixed'))
-                    ->put('port', '1337')
+                Map::of('string', 'string')
+                    ('port', '1337')
             ),
             new Options(
-                (new Map('string', 'mixed'))
-                    ->put('daemon', true)
+                Map::of('string', 'string')
+                    ('daemon', '')
             )
         ));
     }
@@ -104,7 +104,7 @@ class ListenTest extends TestCase
                 ServerCommand::foreground('./tower')
                     ->withArgument('listen')
                     ->withArgument('1337')
-                    ->withWorkingDirectory(getcwd())
+                    ->withWorkingDirectory(Path::of(getcwd().'/'))
                     ->withEnvironment('TOWER_CONFIG', 'config/config.yml.dist')
             );
 
@@ -113,11 +113,10 @@ class ListenTest extends TestCase
 
         $client = new Internet(
             Transport::tcp(),
-            Url::fromString('//127.0.0.1:1337')->authority()
+            Url::of('//127.0.0.1:1337')->authority()
         );
-        $client
-            ->write(Str::of('{"tags":[]}'))
-            ->close();
+        $client->write(Str::of('{"tags":[]}'));
+        $client->close();
 
         $this->assertTrue($process->isRunning());
         posix_kill($process->pid()->toInt(), SIGKILL);
@@ -135,14 +134,14 @@ USAGE;
 
         $this->assertSame(
             $expected,
-            (string) new Listen(
+            (new Listen(
                 $this->createMock(Ports::class),
                 $this->createMock(Server::class),
-                new Loop(
+                new Serve(
                     $this->createMock(EventBus::class),
-                    new ElapsedPeriod(42)
+                    $this->createMock(Watch::class),
                 )
-            )
+            ))->toString()
         );
     }
 }

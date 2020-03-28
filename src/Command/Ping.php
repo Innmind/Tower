@@ -15,9 +15,12 @@ use Innmind\CLI\{
     Environment,
 };
 use Innmind\Immutable\{
-    SetInterface,
     Set,
     Str,
+};
+use function Innmind\Immutable\{
+    first,
+    unwrap,
 };
 
 final class Ping implements Command
@@ -34,13 +37,12 @@ final class Ping implements Command
     public function __invoke(Environment $env, Arguments $arguments, Options $options): void
     {
         $name = $arguments->get('server');
-        $neighbour = $this
+        $neighbour = first($this
             ->configuration
             ->neighbours()
             ->filter(static function(Neighbour $neighbour) use ($name): bool {
                 return (string) $neighbour->name() === $name;
-            })
-            ->current();
+            }));
 
         $tags = [];
 
@@ -49,16 +51,16 @@ final class Ping implements Command
                 ->split(',')
                 ->reduce(
                     Set::of('string'),
-                    static function(SetInterface $tags, Str $tag): SetInterface {
-                        return $tags->add((string) $tag->trim());
+                    static function(Set $tags, Str $tag): Set {
+                        return $tags->add($tag->trim()->toString());
                     }
                 );
         }
 
-        ($this->ping)($neighbour, ...$tags);
+        ($this->ping)($neighbour, ...unwrap($tags));
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return <<<USAGE
 ping server --tags=

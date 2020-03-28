@@ -31,7 +31,7 @@ class SshTest extends TestCase
     {
         $neighbour = new Neighbour(
             new Name('foo'),
-            Url::fromString('ssh://baptouuuu@example.com:1337/path/to/config')
+            Url::of('ssh://baptouuuu@example.com:1337/path/to/config')
         );
 
         $ping = new Ssh(
@@ -50,8 +50,8 @@ class SshTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with($this->callback(static function($command): bool {
-                return (string) $command === "tower 'trigger' '--tags=foo,bar'"
-                    && $command->workingDirectory() === '/path/to/config';
+                return $command->toString() === "tower 'trigger' '--tags=foo,bar'"
+                    && $command->workingDirectory()->toString() === '/path/to/config';
             }));
 
         $this->assertNull($ping($neighbour, 'foo', 'bar'));

@@ -12,8 +12,8 @@ final class Schema implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder;
-        $root = $builder->root('tower');
+        $builder = new TreeBuilder('tower');
+        $root = $builder->getRootNode();
 
         $root
             ->children()

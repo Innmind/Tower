@@ -48,11 +48,11 @@ class PingTest extends TestCase
                     Neighbour::class,
                     new Neighbour(
                         new Name('foo'),
-                        Url::fromString('example.com')
+                        Url::of('example.com')
                     ),
                     $expected = new Neighbour(
                         new Name('bar'),
-                        Url::fromString('example2.com')
+                        Url::of('example2.com')
                     )
                 ),
                 Set::of('string'),
@@ -68,12 +68,12 @@ class PingTest extends TestCase
         $this->assertNull($ping(
             $this->createMock(Environment::class),
             new Arguments(
-                (new Map('string', 'mixed'))
-                    ->put('server', 'bar')
+                Map::of('string', 'string')
+                    ('server', 'bar')
             ),
             new Options(
-                (new Map('string', 'mixed'))
-                    ->put('tags', 'foobar , baz')
+                Map::of('string', 'string')
+                    ('tags', 'foobar , baz')
             )
         ));
     }
@@ -92,14 +92,14 @@ USAGE;
 
         $this->assertSame(
             $expected,
-            (string) new Ping(
+            (new Ping(
                 new Configuration(
                     Set::of(Neighbour::class),
                     Set::of('string'),
                     Set::of('string')
                 ),
                 $this->createMock(ServerPing::class)
-            )
+            ))->toString()
         );
     }
 }

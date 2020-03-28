@@ -55,7 +55,7 @@ class TriggerTest extends TestCase
                         Neighbour::class,
                         $neighbour = new Neighbour(
                             new Name('foo'),
-                            Url::fromString('example.com'),
+                            Url::of('example.com'),
                             'foo'
                         )
                     ),
@@ -74,8 +74,8 @@ class TriggerTest extends TestCase
             $this->createMock(Environment::class),
             new Arguments,
             new Options(
-                (new Map('string', 'mixed'))
-                    ->put('tags', 'foo , bar')
+                Map::of('string', 'string')
+                    ('tags', 'foo , bar')
             )
         ));
     }
@@ -93,7 +93,7 @@ USAGE;
 
         $this->assertSame(
             $expected,
-            (string) new Trigger(
+            (new Trigger(
                 new Run(
                     $this->createMock(Server::class),
                     new Configuration(
@@ -103,7 +103,7 @@ USAGE;
                     ),
                     $this->createMock(Ping::class)
                 )
-            )
+            ))->toString()
         );
     }
 }

@@ -10,7 +10,7 @@ use Innmind\Tower\{
 };
 use Innmind\Url\{
     Url,
-    PathInterface,
+    Path,
 };
 use Innmind\Immutable\Set;
 use Symfony\Component\Config\Definition\Processor;
@@ -27,11 +27,11 @@ final class Yaml implements Loader
         $this->config = new Schema;
     }
 
-    public function __invoke(PathInterface $configPath): Configuration
+    public function __invoke(Path $configPath): Configuration
     {
         $config = $this->processor->processConfiguration(
             $this->config,
-            [Parser::parseFile((string) $configPath)]
+            [Parser::parseFile($configPath->toString())]
         );
         $neighbours = Set::of(Neighbour::class);
 
@@ -39,7 +39,7 @@ final class Yaml implements Loader
             $neighbours = $neighbours->add(
                 new Neighbour(
                     new Name($name),
-                    Url::fromString($value['url']),
+                    Url::of($value['url']),
                     ...$value['tags']
                 )
             );

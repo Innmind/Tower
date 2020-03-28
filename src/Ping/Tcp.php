@@ -23,15 +23,13 @@ final class Tcp implements Ping
 
     public function __invoke(Neighbour $neighbour, string ...$tags): void
     {
-        $this
-            ->remote
-            ->socket(
-                Transport::tcp(),
-                $neighbour->url()->authority()
-            )
-            ->write(Str::of(Json::encode([
-                'tags' => $tags,
-            ])))
-            ->close();
+        $socket = $this->remote->socket(
+            Transport::tcp(),
+            $neighbour->url()->authority()
+        );
+        $socket->write(Str::of(Json::encode([
+            'tags' => $tags,
+        ])));
+        $socket->close();
     }
 }

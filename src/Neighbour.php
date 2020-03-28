@@ -4,19 +4,16 @@ declare(strict_types = 1);
 namespace Innmind\Tower;
 
 use Innmind\Tower\Neighbour\Name;
-use Innmind\Url\UrlInterface;
-use Innmind\Immutable\{
-    SetInterface,
-    Set,
-};
+use Innmind\Url\Url;
+use Innmind\Immutable\Set;
 
 final class Neighbour
 {
     private Name $name;
-    private UrlInterface $url;
+    private Url $url;
     private Set $tags;
 
-    public function __construct(Name $name, UrlInterface $url, string ...$tags)
+    public function __construct(Name $name, Url $url, string ...$tags)
     {
         $this->name = $name;
         $this->url = $url;
@@ -28,15 +25,15 @@ final class Neighbour
         return $this->name;
     }
 
-    public function url(): UrlInterface
+    public function url(): Url
     {
         return $this->url;
     }
 
     /**
-     * @return SetInterface<string>
+     * @return Set<string>
      */
-    public function tags(): SetInterface
+    public function tags(): Set
     {
         return $this->tags;
     }

@@ -9,7 +9,6 @@ use Innmind\Tower\{
     Neighbour,
     EnvironmentVariable,
 };
-use Innmind\Url\PathInterface;
 use Innmind\Immutable\Set;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +30,7 @@ class ConfigurationTest extends TestCase
     public function testThrowWhenInvalidNeighbour()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Argument 1 must be of type SetInterface<Innmind\Tower\Neighbour>');
+        $this->expectExceptionMessage('Argument 1 must be of type Set<Innmind\Tower\Neighbour>');
 
         new Configuration(
             Set::of('int'),
@@ -43,7 +42,7 @@ class ConfigurationTest extends TestCase
     public function testThrowWhenInvalidEnvVars()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Argument 2 must be of type SetInterface<string>');
+        $this->expectExceptionMessage('Argument 2 must be of type Set<string>');
 
         new Configuration(
             Set::of(Neighbour::class),
@@ -55,7 +54,7 @@ class ConfigurationTest extends TestCase
     public function testThrowWhenInvalidActions()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Argument 3 must be of type SetInterface<string>');
+        $this->expectExceptionMessage('Argument 3 must be of type Set<string>');
 
         new Configuration(
             Set::of(Neighbour::class),

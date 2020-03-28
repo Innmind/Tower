@@ -8,20 +8,20 @@ use Innmind\Tower\{
     Neighbour,
     Exception\SchemeNotSupported,
 };
-use Innmind\Immutable\MapInterface;
+use Innmind\Immutable\Map;
 
 final class Delegate implements Ping
 {
-    private MapInterface $pings;
+    private Map $pings;
 
-    public function __construct(MapInterface $pings)
+    public function __construct(Map $pings)
     {
         if (
             (string) $pings->keyType() !== 'string' ||
             (string) $pings->valueType() !== Ping::class
         ) {
             throw new \TypeError(sprintf(
-                'Argument 1 must be of type MapInterface<string, %s>',
+                'Argument 1 must be of type Map<string, %s>',
                 Ping::class
             ));
         }
@@ -31,7 +31,7 @@ final class Delegate implements Ping
 
     public function __invoke(Neighbour $neighbour, string ...$tags): void
     {
-        $scheme = (string) $neighbour->url()->scheme();
+        $scheme = $neighbour->url()->scheme()->toString();
 
         if (!$this->pings->contains($scheme)) {
             throw new SchemeNotSupported($scheme);

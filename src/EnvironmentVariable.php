@@ -18,13 +18,13 @@ final class EnvironmentVariable
         $value = Str::of($value);
 
         if (!$value->matches(self::PATTERN)) {
-            throw new DomainException((string) $value);
+            throw new DomainException($value->toString());
         }
 
         $parts = $value->capture(self::PATTERN);
 
-        $this->name = (string) $parts->get('name');
-        $this->value = (string) $parts->get('value');
+        $this->name = $parts->get('name')->toString();
+        $this->value = $parts->get('value')->toString();
     }
 
     public function name(): string

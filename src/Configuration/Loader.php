@@ -4,9 +4,9 @@ declare(strict_types = 1);
 namespace Innmind\Tower\Configuration;
 
 use Innmind\Tower\Configuration;
-use Innmind\Url\PathInterface;
+use Innmind\Url\Path;
 
 interface Loader
 {
-    public function __invoke(PathInterface $configPath): Configuration;
+    public function __invoke(Path $configPath): Configuration;
 }

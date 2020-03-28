@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Innmind\Tower\Listener;
 
 use Innmind\Tower\Run;
-use Innmind\Socket\Event\DataReceived;
+use Innmind\Socket\Event\ConnectionReady;
 use Innmind\Json\Json;
 
 final class Ping
@@ -16,9 +16,9 @@ final class Ping
         $this->run = $run;
     }
 
-    public function __invoke(DataReceived $event): void
+    public function __invoke(ConnectionReady $event): void
     {
-        $payload = Json::decode((string) $event->data());
+        $payload = Json::decode($event->connection()->read()->toString());
 
         if (!\is_array($payload)) {
             return;

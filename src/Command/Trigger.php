@@ -11,10 +11,10 @@ use Innmind\CLI\{
     Environment,
 };
 use Innmind\Immutable\{
-    SetInterface,
     Set,
     Str,
 };
+use function Innmind\Immutable\unwrap;
 
 final class Trigger implements Command
 {
@@ -34,16 +34,16 @@ final class Trigger implements Command
                 ->split(',')
                 ->reduce(
                     Set::of('string'),
-                    static function(SetInterface $tags, Str $tag): SetInterface {
-                        return $tags->add((string) $tag->trim());
+                    static function(Set $tags, Str $tag): Set {
+                        return $tags->add($tag->trim()->toString());
                     }
                 );
         }
 
-        ($this->run)(...$tags);
+        ($this->run)(...unwrap($tags));
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return <<<USAGE
 trigger --tags=

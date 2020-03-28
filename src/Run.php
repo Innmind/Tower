@@ -45,7 +45,8 @@ final class Run
                         );
                     }
                 );
-                $process = $this->processes->execute($command)->wait();
+                $process = $this->processes->execute($command);
+                $process->wait();
 
                 if (!$process->exitCode()->isSuccessful()) {
                     throw new ActionFailed($action, $process);
@@ -79,14 +80,12 @@ final class Run
                         );
                     }
                 );
-                $output = (string) $this
-                    ->processes
-                    ->execute($command)
-                    ->wait()
-                    ->output();
+                $process = $this->processes->execute($command);
+                $process->wait();
+                $output = $process->output()->toString();
 
                 return $envs->add(new EnvironmentVariable(
-                    (string) Str::of($output)->trim()
+                    Str::of($output)->trim()->toString(),
                 ));
             }
         );

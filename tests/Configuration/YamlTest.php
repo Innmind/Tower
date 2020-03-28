@@ -9,6 +9,10 @@ use Innmind\Tower\{
     Configuration,
 };
 use Innmind\Url\Path;
+use function Innmind\Immutable\{
+    first,
+    unwrap,
+};
 use PHPUnit\Framework\TestCase;
 
 class YamlTest extends TestCase
@@ -20,22 +24,22 @@ class YamlTest extends TestCase
 
     public function testInvoke()
     {
-        $config = (new Yaml)(new Path('config/config.yml.dist'));
+        $config = (new Yaml)(Path::of('config/config.yml.dist'));
 
         $this->assertInstanceOf(Configuration::class, $config);
         $this->assertCount(1, $config->neighbours());
         $this->assertSame(
             '_name_',
-            (string) $config->neighbours()->current()->name()
+            (string) first($config->neighbours())->name()
         );
         $this->assertSame(
             'ssh://example.com:80/path/to/config/on/neighbour/server.yml',
-            (string) $config->neighbours()->current()->url()
+            first($config->neighbours())->url()->toString()
         );
-        $this->assertSame(['foo', 'bar'], $config->neighbours()->current()->tags()->toPrimitive());
+        $this->assertSame(['foo', 'bar'], unwrap(first($config->neighbours())->tags()));
         $this->assertCount(1, $config->exports());
-        $this->assertSame('echo "ENV=value"', $config->exports()->current());
+        $this->assertSame('echo "ENV=value"', first($config->exports()));
         $this->assertCount(1, $config->actions());
-        $this->assertSame('some bash command', $config->actions()->current());
+        $this->assertSame('some bash command', first($config->actions()));
     }
 }

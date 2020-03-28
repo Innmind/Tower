@@ -29,7 +29,7 @@ class TcpTest extends TestCase
     {
         $neighbour = new Neighbour(
             new Name('foo'),
-            Url::fromString('tcp://127.0.0.1:1338')
+            Url::of('tcp://127.0.0.1:1338')
         );
         $ping = new Tcp(
             $remote = $this->createMock(Remote::class)
