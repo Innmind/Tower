@@ -27,26 +27,13 @@ final class Trigger implements Command
 
     public function __invoke(Environment $env, Arguments $arguments, Options $options): void
     {
-        $tags = [];
-
-        if ($options->contains('tags')) {
-            $tags = unwrap(Str::of($options->get('tags'))
-                ->split(',')
-                ->reduce(
-                    Set::of('string'),
-                    static function(Set $tags, Str $tag): Set {
-                        return $tags->add($tag->trim()->toString());
-                    },
-                ));
-        }
-
-        ($this->run)(...$tags);
+        ($this->run)(...unwrap($arguments->pack()));
     }
 
     public function toString(): string
     {
         return <<<USAGE
-trigger --tags=
+trigger ...tags
 
 Will call the actions configured to happen when this server is pinged
 

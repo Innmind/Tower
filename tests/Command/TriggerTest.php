@@ -22,6 +22,7 @@ use Innmind\Server\Control\Server;
 use Innmind\Immutable\{
     Set,
     Map,
+    Sequence,
 };
 use PHPUnit\Framework\TestCase;
 
@@ -72,18 +73,18 @@ class TriggerTest extends TestCase
 
         $this->assertNull($trigger(
             $this->createMock(Environment::class),
-            new Arguments,
-            new Options(
-                Map::of('string', 'string')
-                    ('tags', 'foo , bar')
-            )
+            new Arguments(
+                null,
+                Sequence::strings('foo', 'bar'),
+            ),
+            new Options,
         ));
     }
 
     public function testUsage()
     {
         $expected = <<<USAGE
-trigger --tags=
+trigger ...tags
 
 Will call the actions configured to happen when this server is pinged
 

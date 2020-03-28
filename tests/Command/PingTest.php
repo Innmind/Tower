@@ -20,6 +20,7 @@ use Innmind\Url\Url;
 use Innmind\Immutable\{
     Set,
     Map,
+    Sequence,
 };
 use PHPUnit\Framework\TestCase;
 
@@ -69,19 +70,17 @@ class PingTest extends TestCase
             $this->createMock(Environment::class),
             new Arguments(
                 Map::of('string', 'string')
-                    ('server', 'bar')
+                    ('server', 'bar'),
+                Sequence::strings('foobar', 'baz'),
             ),
-            new Options(
-                Map::of('string', 'string')
-                    ('tags', 'foobar , baz')
-            )
+            new Options,
         ));
     }
 
     public function testUsage()
     {
         $expected = <<<USAGE
-ping server --tags=
+ping server ...tags
 
 Send a ping to a configured server in order to trigger its behaviour
 

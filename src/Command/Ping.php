@@ -44,26 +44,13 @@ final class Ping implements Command
                 return (string) $neighbour->name() === $name;
             }));
 
-        $tags = [];
-
-        if ($options->contains('tags')) {
-            $tags = unwrap(Str::of($options->get('tags'))
-                ->split(',')
-                ->reduce(
-                    Set::of('string'),
-                    static function(Set $tags, Str $tag): Set {
-                        return $tags->add($tag->trim()->toString());
-                    }
-                ));
-        }
-
-        ($this->ping)($neighbour, ...$tags);
+        ($this->ping)($neighbour, ...unwrap($arguments->pack()));
     }
 
     public function toString(): string
     {
         return <<<USAGE
-ping server --tags=
+ping server ...tags
 
 Send a ping to a configured server in order to trigger its behaviour
 
