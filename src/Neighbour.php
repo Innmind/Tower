@@ -12,9 +12,9 @@ use Innmind\Immutable\{
 
 final class Neighbour
 {
-    private $name;
-    private $url;
-    private $tags;
+    private Name $name;
+    private UrlInterface $url;
+    private Set $tags;
 
     public function __construct(Name $name, UrlInterface $url, string ...$tags)
     {

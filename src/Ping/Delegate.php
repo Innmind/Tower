@@ -12,7 +12,7 @@ use Innmind\Immutable\MapInterface;
 
 final class Delegate implements Ping
 {
-    private $pings;
+    private MapInterface $pings;
 
     public function __construct(MapInterface $pings)
     {

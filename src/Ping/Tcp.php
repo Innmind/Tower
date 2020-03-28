@@ -14,7 +14,7 @@ use Innmind\Immutable\Str;
 
 final class Tcp implements Ping
 {
-    private $remote;
+    private Remote $remote;
 
     public function __construct(Remote $remote)
     {

@@ -22,8 +22,8 @@ use Innmind\Immutable\{
 
 final class Ping implements Command
 {
-    private $configuration;
-    private $ping;
+    private Configuration $configuration;
+    private ServerPing $ping;
 
     public function __construct(Configuration $configuration, ServerPing $ping)
     {

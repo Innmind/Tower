@@ -9,7 +9,7 @@ use Innmind\Json\Json;
 
 final class Ping
 {
-    private $run;
+    private Run $run;
 
     public function __construct(Run $run)
     {

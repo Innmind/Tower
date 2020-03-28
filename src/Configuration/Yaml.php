@@ -18,8 +18,8 @@ use Symfony\Component\Yaml\Yaml as Parser;
 
 final class Yaml implements Loader
 {
-    private $processor;
-    private $config;
+    private Processor $processor;
+    private Schema $config;
 
     public function __construct()
     {

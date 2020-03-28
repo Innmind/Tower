@@ -18,7 +18,7 @@ use Innmind\Immutable\{
 
 final class Trigger implements Command
 {
-    private $run;
+    private Run $run;
 
     public function __construct(Run $run)
     {

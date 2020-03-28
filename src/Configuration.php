@@ -9,9 +9,9 @@ use Innmind\Immutable\SetInterface;
 
 final class Configuration
 {
-    private $neighbours;
-    private $exports;
-    private $actions;
+    private SetInterface $neighbours;
+    private SetInterface $exports;
+    private SetInterface $actions;
 
     public function __construct(
         SetInterface $neighbours,

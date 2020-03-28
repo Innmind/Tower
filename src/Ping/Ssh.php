@@ -12,7 +12,7 @@ use Innmind\Server\Control\Server\Command;
 
 final class Ssh implements Ping
 {
-    private $remote;
+    private Remote $remote;
 
     public function __construct(Remote $remote)
     {

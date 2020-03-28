@@ -15,9 +15,9 @@ use Innmind\Immutable\{
 
 final class Run
 {
-    private $processes;
-    private $configuration;
-    private $ping;
+    private Server\Processes $processes;
+    private Configuration $configuration;
+    private Ping $ping;
 
     public function __construct(
         Server $server,

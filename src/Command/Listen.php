@@ -23,9 +23,9 @@ use Innmind\Url\Authority\Port;
 
 final class Listen implements Command
 {
-    private $ports;
-    private $server;
-    private $loop;
+    private Ports $ports;
+    private Server $server;
+    private Loop $loop;
 
     public function __construct(Ports $ports, Server $server, Loop $loop)
     {

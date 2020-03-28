@@ -10,8 +10,8 @@ final class EnvironmentVariable
 {
     private const PATTERN = '~^(?<name>[A-Z0-9_]+)=(?<value>.*)$~';
 
-    private $name;
-    private $value;
+    private string $name;
+    private string $value;
 
     public function __construct(string $value)
     {
