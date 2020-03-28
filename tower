@@ -43,7 +43,7 @@ new class extends Main {
             $os->remote(),
             $os->ports(),
             $os->sockets(),
-            $path
+            $path,
         );
         $run($env);
     }
