@@ -21,7 +21,8 @@
         "symfony/config": "~5.0",
         "symfony/yaml": "~5.0",
         "innmind/json": "^1.1",
-        "innmind/cli-framework": "^1.2"
+        "innmind/cli-framework": "^1.2",
+        "innmind/genome": "^3.0"
     },
     "autoload": {
         "psr-4": {
@@ -41,10 +42,7 @@
         "innmind/black-box": "^4.9"
     },
     "bin": ["tower"],
-    "extra": {
-        "gene": {
-            "expression": ["tower listen 1337 --daemon"],
-            "mutation": ["tower listen 1337 --daemon --restart"]
-        }
+    "provide": {
+        "innmind/genome": "3.0"
     }
 }
