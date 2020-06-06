@@ -8,19 +8,20 @@ use Innmind\Tower\{
     Exception\DomainException,
 };
 use PHPUnit\Framework\TestCase;
-use Eris\{
-    TestTrait,
-    Generator,
+use Innmind\BlackBox\{
+    PHPUnit\BlackBox,
+    Set,
 };
 
 class EnvironmentVariableTest extends TestCase
 {
-    use TestTrait;
+    use BlackBox;
 
     public function testInterface()
     {
         $this
-            ->forAll(Generator\string())
+            ->forAll(Set\Unicode::strings())
+            ->filter(fn($string) => \strpos($string, "\n") === false)
             ->then(function(string $string): void {
                 $env = new EnvironmentVariable('FOO_BAR_42='.$string);
 
@@ -32,7 +33,7 @@ class EnvironmentVariableTest extends TestCase
     public function testThrowWhenInvalidName()
     {
         $this
-            ->forAll(Generator\string())
+            ->forAll(Set\Unicode::strings())
             ->then(function(string $string): void {
                 $this->expectException(DomainException::class);
                 $this->expectExceptionMessage($string.'=foo');

@@ -3,13 +3,18 @@ declare(strict_types = 1);
 
 namespace Innmind\Tower;
 
+use Innmind\Tower\Command\{
+    Trigger,
+    Ping as PingCommand,
+    Listen,
+};
 use Innmind\Server\Control\Server;
 use Innmind\Url\Path;
 use Innmind\Socket\{
     Serve,
     Event\ConnectionReady,
 };
-use Innmind\CLI\Commands;
+use Innmind\CLI\Command;
 use Innmind\OperatingSystem\{
     Remote,
     Ports,
@@ -22,13 +27,16 @@ use Innmind\Immutable\{
     Set,
 };
 
+/**
+ * @return list<Command>
+ */
 function bootstrap(
     Server $server,
     Remote $remote,
     Ports $ports,
     Sockets $sockets,
     Path $config
-): Commands {
+): array {
     $configuration = (new Configuration\Yaml)($config);
     /**
      * @psalm-suppress InvalidScalarArgument
@@ -53,9 +61,9 @@ function bootstrap(
         $sockets->watch(new ElapsedPeriod(3600000)), // 1 hour
     );
 
-    return new Commands(
-        new Command\Trigger($run),
-        new Command\Ping($configuration, $ping),
-        new Command\Listen($ports, $server, $loop),
-    );
+    return [
+        new Trigger($run),
+        new PingCommand($configuration, $ping),
+        new Listen($ports, $server, $loop),
+    ];
 }
