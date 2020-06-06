@@ -15,36 +15,30 @@ foreach ($paths as $file) {
     }
 }
 
-use Innmind\CLI\{
+use Innmind\CLI\Framework\{
     Main,
-    Environment,
+    Application,
 };
-use Innmind\Url\{
-    Url,
-    Path,
-};
-use Innmind\OperatingSystem\OperatingSystem;
+use Innmind\Url\Path;
 use function Innmind\Tower\bootstrap;
-use function Innmind\SilentCartographer\bootstrap as cartographer;
 
 new class extends Main {
-    protected function main(Environment $env, OperatingSystem $os): void
+    protected function configure(Application $app): Application
     {
-        $os = cartographer($os)['cli'](Url::of(__DIR__));
+        return $app->commands(static function($env, $os) {
+            $path = $env->workingDirectory()->resolve(Path::of('tower.yml'));
 
-        $path = $env->workingDirectory()->resolve(Path::of('tower.yml'));
+            if ($env->variables()->contains('TOWER_CONFIG')) {
+                $path = Path::of($env->variables()->get('TOWER_CONFIG'));
+            }
 
-        if ($env->variables()->contains('TOWER_CONFIG')) {
-            $path = Path::of($env->variables()->get('TOWER_CONFIG'));
-        }
-
-        $run = bootstrap(
-            $os->control(),
-            $os->remote(),
-            $os->ports(),
-            $os->sockets(),
-            $path,
-        );
-        $run($env);
+            return bootstrap(
+                $os->control(),
+                $os->remote(),
+                $os->ports(),
+                $os->sockets(),
+                $path,
+            );
+        });
     }
 };

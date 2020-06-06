@@ -26,6 +26,7 @@ class BootstrapTest extends TestCase
             Path::of('config/config.yml.dist')
         );
 
-        $this->assertInstanceOf(Commands::class, $commands);
+        $this->assertIsArray($commands);
+        $this->assertCount(3, $commands);
     }
 }

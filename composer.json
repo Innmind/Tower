@@ -20,10 +20,8 @@
         "innmind/url": "~3.3",
         "symfony/config": "~5.0",
         "symfony/yaml": "~5.0",
-        "innmind/operating-system": "~2.0",
-        "innmind/cli": "~2.0",
         "innmind/json": "^1.1",
-        "innmind/silent-cartographer": "~2.0"
+        "innmind/cli-framework": "^1.2"
     },
     "autoload": {
         "psr-4": {
