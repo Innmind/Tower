@@ -31,7 +31,11 @@ final class Listen implements Gene
     ): History {
         try {
             $preCondition = new Script(
-                Command::foreground('which')->withArgument('tower'),
+                Command::foreground('composer')
+                    ->withArgument('global')
+                    ->withArgument('exec')
+                    ->withArgument('tower help')
+                    ->withShortOption('v'),
             );
             $preCondition($target);
         } catch (ScriptFailed $e) {
@@ -40,10 +44,11 @@ final class Listen implements Gene
 
         try {
             $listen = new Script(
-                Command::foreground('tower')
-                    ->withArgument('listen')
-                    ->withArgument('1337')
-                    ->withOption('daemon'),
+                Command::foreground('composer')
+                    ->withArgument('global')
+                    ->withArgument('exec')
+                    ->withArgument('tower listen 1337 --daemon')
+                    ->withShortOption('v'),
             );
             $listen($target);
         } catch (ScriptFailed $e) {
