@@ -43,6 +43,6 @@
     },
     "bin": ["tower"],
     "provide": {
-        "innmind/genome": "3.0"
+        "innmind/genome-genes": "3.0"
     }
 }
