@@ -48,7 +48,7 @@ final class Run
                 $process = $this->processes->execute($command);
                 $process->wait();
 
-                if (!$process->exitCode()->isSuccessful()) {
+                if (!$process->exitCode()->successful()) {
                     throw new ActionFailed($action, $process);
                 }
             });
