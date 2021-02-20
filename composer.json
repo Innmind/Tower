@@ -15,7 +15,7 @@
         "issues": "http://github.com/Innmind/Tower/issues"
     },
     "require": {
-        "php": "~7.4",
+        "php": "~7.4|~8.0",
         "innmind/immutable": "~3.5",
         "innmind/url": "~3.3",
         "symfony/config": "~5.0",
