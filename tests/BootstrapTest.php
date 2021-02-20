@@ -5,7 +5,6 @@ namespace Tests\Innmind\Tower;
 
 use function Innmind\Tower\bootstrap;
 use Innmind\Server\Control\Server;
-use Innmind\CLI\Commands;
 use Innmind\Url\Path;
 use Innmind\OperatingSystem\{
     Remote,

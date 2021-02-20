@@ -73,7 +73,6 @@ final class Run
             Set::of(EnvironmentVariable::class),
             function(Set $envs, string $command): Set {
                 /** @var Set<EnvironmentVariable> $envs */
-
                 $command = $envs->reduce(
                     Command::foreground($command),
                     static function(Command $command, EnvironmentVariable $env): Command {
