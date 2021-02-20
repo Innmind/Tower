@@ -104,12 +104,12 @@ class ListenTest extends TestCase
                 ServerCommand::foreground('./tower')
                     ->withArgument('listen')
                     ->withArgument('1337')
-                    ->withWorkingDirectory(Path::of(getcwd().'/'))
+                    ->withWorkingDirectory(Path::of(\getcwd().'/'))
                     ->withEnvironment('TOWER_CONFIG', 'config/config.yml.dist')
             );
 
         //wait for the process to open the connection
-        sleep(1);
+        \sleep(1);
 
         $client = new Internet(
             Transport::tcp(),
@@ -119,7 +119,7 @@ class ListenTest extends TestCase
         $client->close();
 
         $this->assertTrue($process->isRunning());
-        posix_kill($process->pid()->toInt(), SIGKILL);
+        \posix_kill($process->pid()->toInt(), \SIGKILL);
     }
 
     public function testUsage()

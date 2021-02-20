@@ -47,7 +47,6 @@ final class Yaml implements Loader
             );
         }
 
-
         return new Configuration(
             $neighbours,
             Set::strings(...$config['exports']),

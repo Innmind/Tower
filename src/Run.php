@@ -48,7 +48,7 @@ final class Run
                 $process = $this->processes->execute($command);
                 $process->wait();
 
-                if (!$process->exitCode()->isSuccessful()) {
+                if (!$process->exitCode()->successful()) {
                     throw new ActionFailed($action, $process);
                 }
             });
@@ -73,7 +73,6 @@ final class Run
             Set::of(EnvironmentVariable::class),
             function(Set $envs, string $command): Set {
                 /** @var Set<EnvironmentVariable> $envs */
-
                 $command = $envs->reduce(
                     Command::foreground($command),
                     static function(Command $command, EnvironmentVariable $env): Command {

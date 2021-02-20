@@ -28,7 +28,7 @@ final class Ssh implements Ping
             ->execute(
                 Command::background('tower')
                     ->withArgument('trigger')
-                    ->withOption('tags', implode(',', $tags))
+                    ->withOption('tags', \implode(',', $tags))
                     ->withWorkingDirectory($neighbour->url()->path()),
             );
     }

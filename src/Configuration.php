@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Innmind\Tower;
 
-use Innmind\Tower\Configuration\Loader;
 use Innmind\Immutable\Set;
 use function Innmind\Immutable\assertSet;
 

@@ -41,16 +41,37 @@ class RunTest extends TestCase
             $this->createMock(Ping::class)
         );
         $processes
-            ->expects($this->at(0))
+            ->expects($this->exactly(4))
             ->method('execute')
-            ->with($this->callback(static function($command): bool {
-                return $command->toString() === 'env1';
-            }))
-            ->willReturn($process = $this->createMock(Process::class));
-        $process
+            ->withConsecutive(
+                [$this->callback(static function($command): bool {
+                    return $command->toString() === 'env1';
+                })],
+                [$this->callback(static function($command): bool {
+                    return $command->toString() === 'env2' &&
+                        $command->environment()->get('ENV1') === 'foo';
+                })],
+                [$this->callback(static function($command): bool {
+                    return $command->toString() === 'action1' &&
+                        $command->environment()->get('ENV1') === 'foo' &&
+                        $command->environment()->get('ENV2') === 'bar';
+                })],
+                [$this->callback(static function($command): bool {
+                    return $command->toString() === 'action2' &&
+                        $command->environment()->get('ENV1') === 'foo' &&
+                        $command->environment()->get('ENV2') === 'bar';
+                })],
+            )
+            ->will($this->onConsecutiveCalls(
+                $process1 = $this->createMock(Process::class),
+                $process2 = $this->createMock(Process::class),
+                $process3 = $this->createMock(Process::class),
+                $process4 = $this->createMock(Process::class),
+            ));
+        $process1
             ->expects($this->once())
             ->method('wait');
-        $process
+        $process1
             ->expects($this->once())
             ->method('output')
             ->willReturn($output = $this->createMock(Output::class));
@@ -58,18 +79,10 @@ class RunTest extends TestCase
             ->expects($this->once())
             ->method('toString')
             ->willReturn("ENV1=foo\n");
-        $processes
-            ->expects($this->at(1))
-            ->method('execute')
-            ->with($this->callback(static function($command): bool {
-                return $command->toString() === 'env2' &&
-                    $command->environment()->get('ENV1') === 'foo';
-            }))
-            ->willReturn($process = $this->createMock(Process::class));
-        $process
+        $process2
             ->expects($this->once())
             ->method('wait');
-        $process
+        $process2
             ->expects($this->once())
             ->method('output')
             ->willReturn($output = $this->createMock(Output::class));
@@ -77,35 +90,17 @@ class RunTest extends TestCase
             ->expects($this->once())
             ->method('toString')
             ->willReturn("ENV2=bar\n");
-        $processes
-            ->expects($this->at(2))
-            ->method('execute')
-            ->with($this->callback(static function($command): bool {
-                return $command->toString() === 'action1' &&
-                    $command->environment()->get('ENV1') === 'foo' &&
-                    $command->environment()->get('ENV2') === 'bar';
-            }))
-            ->willReturn($process = $this->createMock(Process::class));
-        $process
+        $process3
             ->expects($this->once())
             ->method('wait');
-        $process
+        $process3
             ->expects($this->once())
             ->method('exitCode')
             ->willReturn(new ExitCode(0));
-        $processes
-            ->expects($this->at(3))
-            ->method('execute')
-            ->with($this->callback(static function($command): bool {
-                return $command->toString() === 'action2' &&
-                    $command->environment()->get('ENV1') === 'foo' &&
-                    $command->environment()->get('ENV2') === 'bar';
-            }))
-            ->willReturn($process = $this->createMock(Process::class));
-        $process
+        $process4
             ->expects($this->once())
             ->method('wait');
-        $process
+        $process4
             ->expects($this->once())
             ->method('exitCode')
             ->willReturn(new ExitCode(0));
@@ -183,16 +178,12 @@ class RunTest extends TestCase
             $ping = $this->createMock(Ping::class)
         );
         $ping
-            ->expects($this->at(0))
-            ->method('__invoke')
-            ->with($neighbour1, 'foo', 'baz');
-        $ping
-            ->expects($this->at(1))
-            ->method('__invoke')
-            ->with($neighbour3, 'foo', 'baz');
-        $ping
             ->expects($this->exactly(2))
-            ->method('__invoke');
+            ->method('__invoke')
+            ->withConsecutive(
+                [$neighbour1, 'foo', 'baz'],
+                [$neighbour3, 'foo', 'baz'],
+            );
 
         $this->assertNull($run('foo', 'baz'));
     }
