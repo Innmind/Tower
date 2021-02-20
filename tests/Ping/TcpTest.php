@@ -43,12 +43,12 @@ class TcpTest extends TestCase
             )
             ->willReturn($client = $this->createMock(Client::class));
         $client
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('write')
             ->with(Str::of('{"tags":["foo","bar"]}'))
             ->will($this->returnSelf());
         $client
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('close');
 
         $this->assertNull($ping($neighbour, 'foo', 'bar'));
